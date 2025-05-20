@@ -44,7 +44,40 @@ public class QueueArray implements QueueInterface
     {
         if(size() == capacity - 1)
         {
-            
+            int newCapacity;
+            if(growth == 0)
+            {
+                newCapacity = capacity * 2;
+            }
+            else
+            {
+                newCapacity = capacity + growth;
+            }
+            Object newQueue[] = new Object[newCapacity];
+            int newFirst = first;
+
+            for(int i = 0; i < size(); i++)
+            {
+                newQueue[i] = queue[newFirst];
+                newFirst = (newFirst + 1) % capacity;
+            }
+            last = size();
+            first = 0;
+            capacity = newCapacity;
+            queue = newQueue;
         }
+        queue[last] = newObject;
+        last = (last + 1) % capacity;
+    }
+
+    public Object dequeue() throws EEmptyQueue
+    {
+        if(isEmpty())
+        {
+            throw new EEmptyQueue("Fila vazia");
+        }
+        Object removed = queue[first];
+        first = (first + 1) % capacity;
+        return removed;
     }
 }
