@@ -5,7 +5,12 @@ public class Node
     public Object element;
     public Node next;
 
-    public Object getelement()
+    public Node(Object o)
+    {
+        element = o;
+    }
+
+    public Object getElement()
     {
         return element;
     }
