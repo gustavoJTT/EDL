@@ -1,4 +1,4 @@
-package fila;
+package Fila;
 
 public class EEmptyQueue extends RuntimeException
 {

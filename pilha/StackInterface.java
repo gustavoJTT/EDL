@@ -1,4 +1,4 @@
-package pilha;
+package Pilha;
 
 public interface StackInterface
 {

@@ -1,5 +1,5 @@
-package pilha.pilhaRubroNegra;
-import pilha.EEmptyStack;
+package Pilha.PilhaRubroNegra;
+import Pilha.EEmptyStack;
 
 public class RbProgram
 {

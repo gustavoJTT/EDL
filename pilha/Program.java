@@ -1,4 +1,4 @@
-package pilha;
+package Pilha;
 import java.util.Scanner;
 
 public class Program

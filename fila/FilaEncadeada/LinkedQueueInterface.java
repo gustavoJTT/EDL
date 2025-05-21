@@ -1,10 +1,11 @@
-package Fila;
+package Fila.FilaEncadeada;
+import Fila.EEmptyQueue;
 
-public interface QueueInterface
+public interface LinkedQueueInterface
 {
     public int size();
     public boolean isEmpty();
     public Object first() throws EEmptyQueue;
-    public void enqueue(Object newObject);
+    public void enqueue(Object element);
     public Object dequeue() throws EEmptyQueue;
 }

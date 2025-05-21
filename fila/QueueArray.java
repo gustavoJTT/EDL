@@ -1,4 +1,4 @@
-package fila;
+package Fila;
 
 public class QueueArray implements QueueInterface
 {
@@ -15,7 +15,7 @@ public class QueueArray implements QueueInterface
         {
             growth = 0;
         }
-        Object queue[] = new Object[capacity];
+        queue = new Object[capacity];
     }
 
     //isEmpty & size
@@ -79,5 +79,51 @@ public class QueueArray implements QueueInterface
         Object removed = queue[first];
         first = (first + 1) % capacity;
         return removed;
+    }
+
+    public void reverse()
+    {
+        Object reverseQueue[] = new Object[capacity];
+        int newFirst = first;
+
+        for(int i = size(); i + 1 != last; i--)
+        {
+            reverseQueue[i] = queue[newFirst];
+            newFirst = (newFirst + 1) % capacity;
+        }
+        last = size();
+        first = 0;
+        queue = reverseQueue;
+    }
+
+    public void print()
+    {
+        System.out.println("Fila (tamanho total: " + capacity + ")");
+        for (int i = 0; i < size(); i++)
+        {
+            System.out.print("[" + i + "]: ");
+            if (queue[i] != null)
+            {
+                System.out.print(queue[i]);
+            }
+            else
+            {
+                System.out.print("null");
+            }
+
+            if (i == first)
+            {
+                System.out.print(" <- início");
+            }
+            
+            if (i == last)
+            {
+                System.out.print(" <- fim");
+            }
+            System.out.println();
+        }
+        System.out.println("Tamanho atual da fila (elementos): " + size());
+        System.out.println("Está vazia? " + isEmpty());
+        System.out.println("----------------------------------");
     }
 }
