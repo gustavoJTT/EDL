@@ -106,8 +106,8 @@ public class RBStackArray implements RBStackInterface
             newRbStack[newBlkPosition + i] = rbStack[blkPosition + i];
         }
 
-        blkPosition = newBlkPosition;
         capacity = newCapacity;
+        blkPosition = newBlkPosition;
         rbStack = newRbStack;
     }
 

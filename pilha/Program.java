@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Program
 {
-    private static StackArray stack;
+    private static StackArray stack ;
 
     public static void main(String[] args) {
         boolean menuState = true;

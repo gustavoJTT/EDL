@@ -61,9 +61,9 @@ public class QueueArray implements QueueInterface
                 newQueue[i] = queue[newFirst];
                 newFirst = (newFirst + 1) % capacity;
             }
-            last = size();
-            first = 0;
             capacity = newCapacity;
+            first = 0;
+            last = size();
             queue = newQueue;
         }
         queue[last] = newObject;
@@ -91,9 +91,9 @@ public class QueueArray implements QueueInterface
             reverseQueue[i] = queue[newFirst];
             newFirst = (newFirst + 1) % capacity;
         }
-        last = size();
-        first = 0;
         queue = reverseQueue;
+        first = 0;
+        last = size();
     }
 
     public void print()
