@@ -1,13 +1,10 @@
-package Pilha.PilhaRubroNegra;
+package Pilha.pilhaRubroNegra;
 
 import Pilha.EEmptyStack;
 
 public class RBStackArray implements RBStackInterface
 {
-    private int capacity;
-    private int growth;
-    private int redPosition;
-    private int blkPosition;
+    private int capacity, growth, redPosition, blkPosition;
     private Object rbStack[];
 
     public RBStackArray(int capacity, int growth)
@@ -18,7 +15,7 @@ public class RBStackArray implements RBStackInterface
         this.growth = growth;
         if(growth <= 0)
         {
-            growth = 0;
+            this.growth = 0;
         }
         rbStack = new Object[capacity];
     }
@@ -100,7 +97,7 @@ public class RBStackArray implements RBStackInterface
             newRbStack[i] = rbStack[i];
         }
 
-        int newBlkPosition = newCapacity - blkPosition;
+        int newBlkPosition = newCapacity - blkSize();
         for(int i = 0; i < blkSize(); i++)
         {
             newRbStack[newBlkPosition + i] = rbStack[blkPosition + i];

@@ -2,13 +2,13 @@ package Deque;
 
 public class DequeArray implements DequeInterface
 {
-    private int first, last, capacity, growth;
+    private int capacity, growth, firstElement, lastElement;
     private Object array[];
 
     public DequeArray(int capacity, int growth)
     {
-        this.first = 0;
-        this.last = 0;
+        this.firstElement = 0;
+        this.lastElement = 0;
         this.capacity = capacity;
         this.growth = growth;
 
@@ -22,22 +22,22 @@ public class DequeArray implements DequeInterface
     // isEmpty & size
     public boolean isEmpty()
     {
-        return first == last;
+        return firstElement == lastElement;
     }
 
     public int size()
     {
-        return (last - first + capacity) % capacity;
+        return (lastElement - firstElement + capacity) % capacity;
     }
 
-    // fisrt & last
+    // first & last
     public Object first() throws EEmptyDeque
     {
         if (isEmpty())
         {
             throw new EEmptyDeque("Deque vazio");
         }
-        return array[first];
+        return array[firstElement];
     }
 
     public Object last() throws EEmptyDeque
@@ -46,7 +46,7 @@ public class DequeArray implements DequeInterface
         {
             throw new EEmptyDeque("Deque vazio");
         }
-        return array[(last - 1 + capacity) % capacity];
+        return array[(lastElement - 1 + capacity) % capacity];
     }
 
     // enqueue
@@ -64,7 +64,7 @@ public class DequeArray implements DequeInterface
                 newCapacity = capacity + growth;
             }
             Object newArray[] = new Object[newCapacity];
-            int newFirst = first;
+            int newFirst = firstElement;
             newArray[0] = newElement;
 
             for (int i = 1; i < size(); i++)
@@ -72,13 +72,13 @@ public class DequeArray implements DequeInterface
                 newArray[i] = array[newFirst];
                 newFirst = (newFirst + 1) % capacity;
             }
-            first = 0;
-            last = size();
+            firstElement = 0;
+            lastElement = size();
             capacity = newCapacity;
             array = newArray;
         }
-        first = (first - 1 + capacity) % capacity;
-        array[first] = newElement;
+        firstElement = (firstElement - 1 + capacity) % capacity;
+        array[firstElement] = newElement;
     }
 
     public void enqueueEnd(Object newElement)
@@ -95,20 +95,20 @@ public class DequeArray implements DequeInterface
                 newCapacity = capacity + growth;
             }
             Object newArray[] = new Object[newCapacity];
-            int newFirst = first;
+            int newFirst = firstElement;
 
             for (int i = 0; i < size(); i++)
             {
                 newArray[i] = array[newFirst];
                 newFirst = (newFirst + 1) % capacity;
             }
-            first = 0;
-            last = size();
+            firstElement = 0;
+            lastElement = size();
             capacity = newCapacity;
             array = newArray;
         }
-        array[last] = newElement;
-        last = (last + 1) % capacity;
+        array[lastElement] = newElement;
+        lastElement = (lastElement + 1) % capacity;
     }
 
     //dequeue
@@ -118,9 +118,9 @@ public class DequeArray implements DequeInterface
         {
             throw new EEmptyDeque("Deque vazio");
         }
-        Object removedElement = array[first];
-        array[first] = null;
-        first = (first + 1) % capacity;
+        Object removedElement = array[firstElement];
+        array[firstElement] = null;
+        firstElement = (firstElement + 1) % capacity;
         return removedElement;
     }
 
@@ -130,10 +130,9 @@ public class DequeArray implements DequeInterface
         {
             throw new EEmptyDeque("Deque vazio");
         }
-        int pos = (last - 1 + capacity) % capacity;
-        Object removedElement = array[pos];
-        array[pos] = null;
-        last = pos;
+        lastElement = (lastElement - 1 + capacity) % capacity;
+        Object removedElement = array[lastElement];
+        array[lastElement] = null;
         return removedElement;
     }
 
@@ -147,13 +146,13 @@ public class DequeArray implements DequeInterface
         }
 
         System.out.print("Deque: [");
-        int current = first;
-        while (current != last)
+        int current = firstElement;
+        while (current != lastElement)
         {
             System.out.print(array[current]);
             current = (current + 1) % capacity;
 
-            if (current != last)
+            if (current != lastElement)
             {
                 System.out.print(", ");
             }

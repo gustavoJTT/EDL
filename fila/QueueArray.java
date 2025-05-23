@@ -1,14 +1,16 @@
 package Fila;
 
+//rever o reverse quando for fazer atividades novamente
+
 public class QueueArray implements QueueInterface
 {
-    private int first, last, capacity, growth;
+    private int  capacity, growth, firstElement, lastElement;
     private Object queue[];
 
     public QueueArray(int capacity, int growth)
     {
-        this.first = 0;
-        this.last = 0;
+        this.firstElement = 0;
+        this.lastElement = 0;
         this.capacity = capacity;
         this.growth = growth;
         if(growth <= 0)
@@ -21,12 +23,12 @@ public class QueueArray implements QueueInterface
     //isEmpty & size
     public boolean isEmpty()
     {
-        return first == last;
+        return firstElement == lastElement;
     }
 
     public int size()
     {
-        return (capacity - first + last) % capacity;
+        return (capacity - firstElement + lastElement) % capacity;
     }
 
     //first
@@ -36,7 +38,7 @@ public class QueueArray implements QueueInterface
         {
             throw new EEmptyQueue("Fila vazia");
         }
-        return queue[first];
+        return queue[firstElement];
     }
 
     //enqueue & dequeue
@@ -54,20 +56,20 @@ public class QueueArray implements QueueInterface
                 newCapacity = capacity + growth;
             }
             Object newQueue[] = new Object[newCapacity];
-            int newFirst = first;
+            int newFirst = firstElement;
 
             for(int i = 0; i < size(); i++)
             {
                 newQueue[i] = queue[newFirst];
                 newFirst = (newFirst + 1) % capacity;
             }
-            first = 0;
-            last = size();
+            firstElement = 0;
+            lastElement = size();
             capacity = newCapacity;
             queue = newQueue;
         }
-        queue[last] = newObject;
-        last = (last + 1) % capacity;
+        queue[lastElement] = newObject;
+        lastElement = (lastElement + 1) % capacity;
     }
 
     public Object dequeue() throws EEmptyQueue
@@ -76,8 +78,8 @@ public class QueueArray implements QueueInterface
         {
             throw new EEmptyQueue("Fila vazia");
         }
-        Object removed = queue[first];
-        first = (first + 1) % capacity;
+        Object removed = queue[firstElement];
+        firstElement = (firstElement + 1) % capacity;
         return removed;
     }
 
@@ -85,43 +87,34 @@ public class QueueArray implements QueueInterface
     {
         Object reverseQueue[] = new Object[capacity];
 
-        for(int i = size(); i + 1 != last; i--)
+        for(int i = size(); i + 1 != lastElement; i--)
         {
-            reverseQueue[i] = queue[(last - 1 - i + capacity) % capacity];
+            reverseQueue[i] = queue[(lastElement - 1 - i + capacity) % capacity];
         }
-        first = 0;
-        last = size();
+        firstElement = 0;
+        lastElement = size();
         queue = reverseQueue;
     }
 
     public void print()
     {
         System.out.println("Fila (tamanho total: " + capacity + ")");
+        int current = firstElement;
         for (int i = 0; i < size(); i++)
         {
-            System.out.print("[" + i + "]: ");
-            if (queue[i] != null)
-            {
-                System.out.print(queue[i]);
-            }
-            else
-            {
-                System.out.print("null");
-            }
-
-            if (i == first)
+            System.out.print("[" + i + "]: " + queue[current]);
+            if (i == 0)
             {
                 System.out.print(" <- início");
             }
-            
-            if (i == last)
+            if (i == size() - 1)
             {
                 System.out.print(" <- fim");
             }
             System.out.println();
+            current = (current + 1) % capacity;
         }
-        System.out.println("Tamanho atual da fila (elementos): " + size());
+        System.out.println("Tamanho atual: " + size());
         System.out.println("Está vazia? " + isEmpty());
-        System.out.println("----------------------------------");
     }
 }

@@ -2,12 +2,12 @@ package Pilha;
 
 public class StackArray implements StackInterface
 {
-    private int capacity, growth, position;
+    private int capacity, growth, currentPosition;
     private Object stack[];
 
     public StackArray(int capacity, int growth)
     {
-        this. position = -1;
+        this. currentPosition = -1;
         this.capacity = capacity;
         this.growth = growth;
         if(growth <= 0)
@@ -20,12 +20,12 @@ public class StackArray implements StackInterface
     //isEmpty & size
     public boolean isEmpty()
     {
-        return position == -1;
+        return currentPosition == -1;
     }
 
     public int size()
     {
-        return position + 1;
+        return currentPosition + 1;
     }
 
     //top
@@ -36,13 +36,13 @@ public class StackArray implements StackInterface
             throw new EEmptyStack("Pilha vazia");
         }
 
-        return stack[position];
+        return stack[currentPosition];
     }
 
     //push & pop
     public void push(Object o)
     {
-        if(position >= capacity - 1) //ou if(position + 1 == capacity)
+        if(currentPosition >= capacity - 1) //ou if(currentPosition + 1 == capacity)
         {
             if(growth == 0)
             {
@@ -60,7 +60,7 @@ public class StackArray implements StackInterface
             }
             stack = newStack;
         }
-        stack[++position] = o;
+        stack[++currentPosition] = o;
     }
 
     public Object pop() throws EEmptyStack
@@ -69,7 +69,7 @@ public class StackArray implements StackInterface
         {
             throw new EEmptyStack("Pilha vazia");
         }
-        Object removed = stack[position--];
+        Object removed = stack[currentPosition--];
         return removed;
     }
 
@@ -80,7 +80,7 @@ public class StackArray implements StackInterface
         {
             throw new EEmptyStack("Pilha vazia");
         }
-        for(int i = 0; i <= position; i++)
+        for(int i = 0; i <= currentPosition; i++)
         {
             System.out.println(String.format("Posição %d -> %s | Capacidade: %d", i, stack[i], capacity));
         }
@@ -88,6 +88,6 @@ public class StackArray implements StackInterface
 
     public void empty()
     {
-        position = -1;
+        currentPosition = -1;
     }
 }

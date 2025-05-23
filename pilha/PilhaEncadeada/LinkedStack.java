@@ -8,13 +8,14 @@ public class LinkedStack implements LinkedStackInterface
 
     public LinkedStack(int capacity)
     {
+        this.head = null;
         this.capacity = capacity;
     }
 
     //isEmpty & size
     public boolean isEmpty()
     {
-        return capacity == 0;
+        return head == null;
     }
 
     public int size()

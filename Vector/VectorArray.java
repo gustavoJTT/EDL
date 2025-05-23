@@ -2,12 +2,12 @@ package Vector;
 
 public class VectorArray implements VectorInterface
 {
-    private int capacity, growth, finalArray;
+    private int capacity, growth, lastElement;
     private Object array[];
 
     public VectorArray(int capacity, int growth)
     {
-        this.finalArray = 0;
+        this.lastElement = 0;
         this.capacity = capacity;
         this.growth = growth;
         if(growth <= 0)
@@ -20,12 +20,12 @@ public class VectorArray implements VectorInterface
     //isEmpty & size
     public boolean isEmpty()
     {
-        return finalArray == 0;
+        return lastElement == 0;
     }
 
     public int size()
     {
-        return finalArray;
+        return lastElement;
     }
 
     //element
@@ -61,14 +61,14 @@ public class VectorArray implements VectorInterface
     }
 
     //insert
-    public void insertAtRank(int rank, Object newObject) throws EEmptyVector, ERankOOL
+    public void insertAtRank(int rank, Object newObject) throws ERankOOL
     {
         if(rank < 0 || rank > size())
         {
             throw new ERankOOL("Rank fora dos limites");
         }
 
-        if(size() == capacity - 1)
+        if(size() == capacity)
         {
             int newCapacity;
             if(growth == 0)
@@ -100,7 +100,7 @@ public class VectorArray implements VectorInterface
             array[i] = array[i - 1];
         }
         array[rank] = newObject;
-        finalArray++;
+        lastElement++;
     }
 
     //remove
@@ -124,7 +124,7 @@ public class VectorArray implements VectorInterface
         }
 
         array[size() - 1] = null; // Remove a referência do último elemento
-        finalArray--;
+        lastElement--;
 
         return removed;
     }
