@@ -72,8 +72,8 @@ public class DequeArray implements DequeInterface
                 newArray[i] = array[newFirst];
                 newFirst = (newFirst + 1) % capacity;
             }
-            last = size();
             first = 0;
+            last = size();
             capacity = newCapacity;
             array = newArray;
         }
@@ -102,9 +102,9 @@ public class DequeArray implements DequeInterface
                 newArray[i] = array[newFirst];
                 newFirst = (newFirst + 1) % capacity;
             }
-            capacity = newCapacity;
             first = 0;
             last = size();
+            capacity = newCapacity;
             array = newArray;
         }
         array[last] = newElement;

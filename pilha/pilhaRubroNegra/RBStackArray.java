@@ -95,7 +95,7 @@ public class RBStackArray implements RBStackInterface
     {
         Object newRbStack[] = new Object[newCapacity];
 
-        for(int i = 0; i < redPosition; i++)
+        for(int i = 0; i <= redPosition; i++)
         {
             newRbStack[i] = rbStack[i];
         }
