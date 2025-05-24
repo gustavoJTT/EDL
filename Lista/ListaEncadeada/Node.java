@@ -1,32 +1,27 @@
-package Fila.FilaEncadeada;
+package Lista.ListaEncadeada;
 
 public class Node
 {
     private Object element;
     private Node next;
 
-    public Node(Object o)
-    {
+    public Node(Object o) {
         element = o;
     }
 
-    public Object getElement()
-    {
+    public Object getElement() {
         return element;
     }
 
-    public void setElement(Object o)
-    {
+    public void setElement(Object o) {
         element = o;
     }
 
-    public Node getNext()
-    {
+    public Node getNext() {
         return next;
     }
 
-    public void setNext(Node n)
-    {
+    public void setNext(Node n) {
         next = n;
     }
 }

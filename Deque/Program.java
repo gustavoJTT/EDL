@@ -11,6 +11,14 @@ public class Program {
         array.enqueueEnd(3);
         array.enqueueBeginning(9);
 
-        array.printDeque(); // Corrigido para chamar o método correto
+        array.printDeque();
+
+        // Test the corrected method name
+        try {
+            System.out.println("Removing from beginning: " + array.dequeueBeginnig());
+            array.printDeque();
+        } catch (EEmptyDeque e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

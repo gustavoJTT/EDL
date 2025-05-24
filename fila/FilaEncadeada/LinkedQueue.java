@@ -1,5 +1,6 @@
 package Fila.FilaEncadeada;
 import Fila.EEmptyQueue;
+import Node.Node;
 
 public class LinkedQueue implements LinkedQueueInterface
 {

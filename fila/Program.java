@@ -1,12 +1,15 @@
 package Fila;
 import java.util.Scanner;
 
-public class Program {
+public class Program
+{
     private static QueueArray queue;
 
-    public static void main(String[] args) {
+    public static void main(String[] args)
+    {
         boolean menuState = true;
-        while (menuState) {
+        while (menuState)
+        {
             System.out.println("");
             System.out.println("Selecione a questão");
             System.out.println("1 -> Questão 1");
@@ -18,7 +21,8 @@ public class Program {
             System.out.print("Opção: ");
             int quest = questScanner.nextInt();
 
-            switch (quest) {
+            switch (quest)
+            {
                 case 1:
                     new Program().Quest1();
                     break;
@@ -43,7 +47,8 @@ public class Program {
         }
     }
 
-    public void Quest1() {
+    public void Quest1()
+    {
         queue = new QueueArray(10, 10);
 
         queue.enqueue(5);
@@ -86,7 +91,8 @@ public class Program {
         System.out.println("Tamanho (duplicação): " + queueDoubling.size()); // 3
     }
 
-    public void Quest4() {
+    public void Quest4()
+    {
         queue = new QueueArray(10, 10);
 
         queue.enqueue(1);
