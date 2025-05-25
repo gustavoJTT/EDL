@@ -2,19 +2,19 @@ package Pilha;
 
 public class StackArray implements StackInterface
 {
-    private int capacity, growth, currentPosition;
+    private int size, growth, currentPosition;
     private Object stack[];
 
-    public StackArray(int capacity, int growth)
+    public StackArray(int size, int growth)
     {
         this. currentPosition = -1;
-        this.capacity = capacity;
+        this.size = size;
         this.growth = growth;
         if(growth <= 0)
         {
             growth = 0;
         }
-        stack = new Object[capacity];
+        stack = new Object[size];
     }
 
     //isEmpty & size
@@ -42,18 +42,18 @@ public class StackArray implements StackInterface
     //push & pop
     public void push(Object o)
     {
-        if(currentPosition >= capacity - 1) //ou if(currentPosition + 1 == capacity)
+        if(currentPosition >= size - 1) //ou if(currentPosition + 1 == size)
         {
             if(growth == 0)
             {
-                capacity *= 2;
+                size *= 2;
             }
             else
             {
-                capacity += growth;
+                size += growth;
             }
             
-            Object newStack[] = new Object[capacity];
+            Object newStack[] = new Object[size];
             for(int newPosition = 0; newPosition < size(); newPosition++)
             {
                 newStack[newPosition] = stack[newPosition];
@@ -82,7 +82,7 @@ public class StackArray implements StackInterface
         }
         for(int i = 0; i <= currentPosition; i++)
         {
-            System.out.println(String.format("Posição %d -> %s | Capacidade: %d", i, stack[i], capacity));
+            System.out.println(String.format("Posição %d -> %s | Capacidade: %d", i, stack[i], size));
         }
     }
 

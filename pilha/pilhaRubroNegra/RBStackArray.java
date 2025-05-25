@@ -4,20 +4,20 @@ import Pilha.EEmptyStack;
 
 public class RBStackArray implements RBStackInterface
 {
-    private int capacity, growth, redPosition, blkPosition;
+    private int size, growth, redPosition, blkPosition;
     private Object rbStack[];
 
-    public RBStackArray(int capacity, int growth)
+    public RBStackArray(int size, int growth)
     {
         this.redPosition = -1;
-        this.blkPosition = capacity;
-        this.capacity = capacity;
+        this.blkPosition = size;
+        this.size = size;
         this.growth = growth;
         if(growth <= 0)
         {
             this.growth = 0;
         }
-        rbStack = new Object[capacity];
+        rbStack = new Object[size];
     }
 
     //isEmpty & size
@@ -28,7 +28,7 @@ public class RBStackArray implements RBStackInterface
 
     public boolean blkIsEmpty()
     {
-        return blkPosition == capacity;
+        return blkPosition == size;
     }
     
     public int redSize()
@@ -38,7 +38,7 @@ public class RBStackArray implements RBStackInterface
 
     public int blkSize()
     {
-        return capacity - blkPosition;
+        return size - blkPosition;
     }
 
     public int sizeStack()
@@ -70,40 +70,40 @@ public class RBStackArray implements RBStackInterface
     {
         if(redPosition + 1 == blkPosition)
         {
-            int newCapacity;
+            int newSize;
             if(growth == 0)
             {
-                newCapacity = capacity * 2;
+                newSize = size * 2;
             }
             else
             {
-                newCapacity = capacity + growth;
+                newSize = size + growth;
             }
-            resizeElements(newCapacity);
+            resizeElements(newSize);
         }
-        else if(sizeStack() <= capacity / 3 && capacity > 1)
+        else if(sizeStack() <= size / 3 && size > 1)
         {
-            int newCapacity = capacity / 2;
-            resizeElements(newCapacity);
+            int newSize = size / 2;
+            resizeElements(newSize);
         }
     }
 
-    public void resizeElements(int newCapacity)
+    public void resizeElements(int newSize)
     {
-        Object newRbStack[] = new Object[newCapacity];
+        Object newRbStack[] = new Object[newSize];
 
         for(int i = 0; i <= redPosition; i++)
         {
             newRbStack[i] = rbStack[i];
         }
 
-        int newBlkPosition = newCapacity - blkSize();
+        int newBlkPosition = newSize - blkSize();
         for(int i = 0; i < blkSize(); i++)
         {
             newRbStack[newBlkPosition + i] = rbStack[blkPosition + i];
         }
 
-        capacity = newCapacity;
+        size = newSize;
         blkPosition = newBlkPosition;
         rbStack = newRbStack;
     }
@@ -148,9 +148,9 @@ public class RBStackArray implements RBStackInterface
     {
         System.out.println("-----------------------------------");
         System.out.println("Pilha Array");
-        System.out.println(String.format("Tamanho do Array: %d\nTamanho Pilha Vermelha: %d - P: %d\nTamanho Pilha Preta: %d - P: %d", capacity, redSize(), redPosition, blkSize(), blkPosition));
+        System.out.println(String.format("Tamanho do Array: %d\nTamanho Pilha Vermelha: %d - P: %d\nTamanho Pilha Preta: %d - P: %d", size, redSize(), redPosition, blkSize(), blkPosition));
 
-        for (int i = 0; i < capacity; i++)
+        for (int i = 0; i < size; i++)
         {
             if (i <= redPosition)
             {

@@ -4,13 +4,13 @@ import Pilha.EEmptyStack;
 
 public class LinkedStack implements LinkedStackInterface
 {
-    private int capacity;
+    private int size;
     private Node head;
 
-    public LinkedStack(int capacity)
+    public LinkedStack(int size)
     {
         this.head = null;
-        this.capacity = capacity;
+        this.size = size;
     }
 
     //isEmpty & size
@@ -21,7 +21,7 @@ public class LinkedStack implements LinkedStackInterface
 
     public int size()
     {
-        return capacity;
+        return size;
     }
 
     //top
@@ -40,7 +40,7 @@ public class LinkedStack implements LinkedStackInterface
         Node newNode = new Node(newElement);
         newNode.setNext(head);  //liga o novo no atual
         head = newNode;
-        capacity++;
+        size++;
     }
 
     public Object pop() throws EEmptyStack
@@ -51,7 +51,7 @@ public class LinkedStack implements LinkedStackInterface
         }
         Object o = head.getElement();
         head = head.getNext();
-        capacity--;
+        size--;
         return o;
     }
 }

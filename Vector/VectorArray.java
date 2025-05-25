@@ -2,19 +2,19 @@ package Vector;
 
 public class VectorArray implements VectorInterface
 {
-    private int capacity, growth, lastElement;
+    private int size, growth, lastElement;
     private Object array[];
 
-    public VectorArray(int capacity, int growth)
+    public VectorArray(int size, int growth)
     {
         this.lastElement = 0;
-        this.capacity = capacity;
+        this.size = size;
         this.growth = growth;
         if(growth <= 0)
         {
             this.growth = 0;
         }
-        array = new Object[capacity];
+        array = new Object[size];
     }
 
     //isEmpty & size
@@ -68,18 +68,18 @@ public class VectorArray implements VectorInterface
             throw new ERankOOL("Rank fora dos limites");
         }
 
-        if(size() == capacity)
+        if(size() == size)
         {
-            int newCapacity;
+            int newSize;
             if(growth == 0)
             {
-                newCapacity = capacity * 2;
+                newSize = size * 2;
             }
             else
             {
-                newCapacity = capacity + growth;
+                newSize = size + growth;
             }
-            Object newArray[] = new Object[newCapacity];
+            Object newArray[] = new Object[newSize];
 
             for(int i = 0; i < size(); i++)
             {
@@ -92,7 +92,7 @@ public class VectorArray implements VectorInterface
                     newArray[i + 1] = array[i];
                 }
             }
-            capacity = newCapacity;
+            size = newSize;
             array = newArray;
         }
         for(int i = size(); i > rank; i--)

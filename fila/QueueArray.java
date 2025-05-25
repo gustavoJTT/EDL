@@ -4,20 +4,20 @@ package Fila;
 
 public class QueueArray implements QueueInterface
 {
-    private int  capacity, growth, firstElement, lastElement;
+    private int  size, growth, firstElement, lastElement;
     private Object queue[];
 
-    public QueueArray(int capacity, int growth)
+    public QueueArray(int size, int growth)
     {
         this.firstElement = 0;
         this.lastElement = 0;
-        this.capacity = capacity;
+        this.size = size;
         this.growth = growth;
         if(growth <= 0)
         {
             growth = 0;
         }
-        queue = new Object[capacity];
+        queue = new Object[size];
     }
 
     //isEmpty & size
@@ -28,7 +28,7 @@ public class QueueArray implements QueueInterface
 
     public int size()
     {
-        return (capacity - firstElement + lastElement) % capacity;
+        return (size - firstElement + lastElement) % size;
     }
 
     //first
@@ -44,32 +44,32 @@ public class QueueArray implements QueueInterface
     //enqueue & dequeue
     public void enqueue(Object newObject)
     {
-        if(size() == capacity - 1)
+        if(size() == size - 1)
         {
-            int newCapacity;
+            int newSize;
             if(growth == 0)
             {
-                newCapacity = capacity * 2;
+                newSize = size * 2;
             }
             else
             {
-                newCapacity = capacity + growth;
+                newSize = size + growth;
             }
-            Object newQueue[] = new Object[newCapacity];
+            Object newQueue[] = new Object[newSize];
             int newFirst = firstElement;
 
             for(int i = 0; i < size(); i++)
             {
                 newQueue[i] = queue[newFirst];
-                newFirst = (newFirst + 1) % capacity;
+                newFirst = (newFirst + 1) % size;
             }
             firstElement = 0;
             lastElement = size();
-            capacity = newCapacity;
+            size = newSize;
             queue = newQueue;
         }
         queue[lastElement] = newObject;
-        lastElement = (lastElement + 1) % capacity;
+        lastElement = (lastElement + 1) % size;
     }
 
     public Object dequeue() throws EEmptyQueue
@@ -79,17 +79,17 @@ public class QueueArray implements QueueInterface
             throw new EEmptyQueue("Fila vazia");
         }
         Object removed = queue[firstElement];
-        firstElement = (firstElement + 1) % capacity;
+        firstElement = (firstElement + 1) % size;
         return removed;
     }
 
     public void reverse()
     {
-        Object reverseQueue[] = new Object[capacity];
+        Object reverseQueue[] = new Object[size];
 
         for(int i = size(); i + 1 != lastElement; i--)
         {
-            reverseQueue[i] = queue[(lastElement - 1 - i + capacity) % capacity];
+            reverseQueue[i] = queue[(lastElement - 1 - i + size) % size];
         }
         firstElement = 0;
         lastElement = size();
@@ -98,7 +98,7 @@ public class QueueArray implements QueueInterface
 
     public void print()
     {
-        System.out.println("Fila (tamanho total: " + capacity + ")");
+        System.out.println("Fila (tamanho total: " + size + ")");
         int current = firstElement;
         for (int i = 0; i < size(); i++)
         {
@@ -112,7 +112,7 @@ public class QueueArray implements QueueInterface
                 System.out.print(" <- fim");
             }
             System.out.println();
-            current = (current + 1) % capacity;
+            current = (current + 1) % size;
         }
         System.out.println("Tamanho atual: " + size());
         System.out.println("Está vazia? " + isEmpty());

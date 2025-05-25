@@ -4,12 +4,12 @@ import Node.Node;
 
 public class LinkedQueue implements LinkedQueueInterface
 {
-    private int capacity;
     private Node head, tail;
+    private int size;
 
-    public LinkedQueue(int capacity)
+    public LinkedQueue(int size)
     {
-        this.capacity = capacity;
+        this.size = size;
         this.head = null;
         this.tail = null;
     }
@@ -17,12 +17,12 @@ public class LinkedQueue implements LinkedQueueInterface
     //isEmpty & size
     public boolean isEmpty()
     {
-        return capacity == 0;
+        return size == 0;
     }
 
     public int size()
     {
-        return capacity;
+        return size;
     }
 
     //first
@@ -49,7 +49,7 @@ public class LinkedQueue implements LinkedQueueInterface
             tail.setNext(newNode);
         }
         tail = newNode;
-        capacity++;
+        size++;
     }
 
     public Object dequeue() throws EEmptyQueue
@@ -60,7 +60,7 @@ public class LinkedQueue implements LinkedQueueInterface
         }
         Object element = head.getElement();
         head = head.getNext();
-        capacity--;
+        size--;
         return element;
     }
 }

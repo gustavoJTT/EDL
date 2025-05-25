@@ -4,7 +4,7 @@ package Node;
 public class Node
 {
     private Object element;
-    private Node next;
+    private Node next, previous;
 
     public Node(Object o)
     {
@@ -29,5 +29,13 @@ public class Node
     public void setNext(Node n)
     {
         next = n;
+    }
+
+    public Node getPrevious() {
+        return previous;
+    }
+
+    public void setPrevious(Node n) {
+        previous = n;
     }
 }
