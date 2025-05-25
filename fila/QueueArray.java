@@ -1,5 +1,7 @@
 package Fila;
 
+import Exceptions.EEmptyQueue;
+
 //rever o reverse quando for fazer atividades novamente
 
 public class QueueArray implements QueueInterface

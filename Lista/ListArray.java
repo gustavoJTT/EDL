@@ -1,4 +1,6 @@
 package Lista;
+import Exceptions.EEmptyList;
+import Exceptions.EInvalidNode;
 import Node.Node;
 
 public class ListArray implements ListInterface

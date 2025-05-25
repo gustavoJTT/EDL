@@ -1,6 +1,6 @@
 package Pilha.PilhaEncadeada;
+import Exceptions.EEmptyStack;
 import Node.Node;
-import Pilha.EEmptyStack;
 
 public class LinkedStack implements LinkedStackInterface
 {

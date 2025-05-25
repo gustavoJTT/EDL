@@ -1,5 +1,7 @@
 package Pilha;
 
+import Exceptions.EEmptyStack;
+
 public interface StackInterface
 {
     public int size();

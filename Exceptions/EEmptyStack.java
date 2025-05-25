@@ -1,4 +1,4 @@
-package Pilha;
+package Exceptions;
 
 public class EEmptyStack extends RuntimeException
 {

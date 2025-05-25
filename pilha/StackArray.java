@@ -1,5 +1,7 @@
 package Pilha;
 
+import Exceptions.EEmptyStack;
+
 public class StackArray implements StackInterface
 {
     private int size, growth, currentPosition;

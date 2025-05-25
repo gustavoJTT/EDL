@@ -1,4 +1,4 @@
-package Vector;
+package Exceptions;
 
 public class ERankOOL extends RuntimeException
 {

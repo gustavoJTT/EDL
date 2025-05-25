@@ -1,4 +1,4 @@
-package Lista;
+package Exceptions;
 
 public class EEmptyList extends RuntimeException
 {

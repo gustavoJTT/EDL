@@ -1,5 +1,5 @@
 package Pilha.pilhaRubroNegra;
-import Pilha.EEmptyStack;
+import Exceptions.EEmptyStack;
 
 public interface RBStackInterface
 {

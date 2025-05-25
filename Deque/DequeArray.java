@@ -1,5 +1,7 @@
 package Deque;
 
+import Exceptions.EEmptyDeque;
+
 public class DequeArray implements DequeInterface
 {
     private int size, growth, firstElement, lastElement;

@@ -1,6 +1,6 @@
 package Pilha.pilhaRubroNegra;
 
-import Pilha.EEmptyStack;
+import Exceptions.EEmptyStack;
 
 public class RBStackArray implements RBStackInterface
 {

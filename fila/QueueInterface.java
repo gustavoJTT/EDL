@@ -1,5 +1,7 @@
 package Fila;
 
+import Exceptions.EEmptyQueue;
+
 public interface QueueInterface
 {
     public int size();

@@ -1,5 +1,8 @@
 package Vector;
 
+import Exceptions.EEmptyVector;
+import Exceptions.ERankOOL;
+
 public interface VectorInterface
 {
     public int size();

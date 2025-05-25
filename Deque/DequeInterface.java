@@ -1,5 +1,7 @@
 package Deque;
 
+import Exceptions.EEmptyDeque;
+
 public interface DequeInterface
 {
     public int size();

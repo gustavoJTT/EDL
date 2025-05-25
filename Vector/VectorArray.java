@@ -1,5 +1,8 @@
 package Vector;
 
+import Exceptions.EEmptyVector;
+import Exceptions.ERankOOL;
+
 public class VectorArray implements VectorInterface
 {
     private int size, growth, lastElement;

@@ -1,6 +1,6 @@
 package Lista.ListaEncadeada;
-import Lista.EEmptyList;
-import Lista.EInvalidNode;
+import Exceptions.EEmptyList;
+import Exceptions.EInvalidNode;
 import Lista.ListInterface;
 import Node.Node;
 
