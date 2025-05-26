@@ -1,15 +1,15 @@
 package Fila;
 
-import Exceptions.EEmptyQueue;
+import Excesao.EEmptyQueue;
 
 //rever o reverse quando for fazer atividades novamente
 
-public class QueueArray implements QueueInterface
+public class QueueRoundArray implements QueueInterface
 {
     private int  size, growth, firstElement, lastElement;
     private Object queue[];
 
-    public QueueArray(int size, int growth)
+    public QueueRoundArray(int size, int growth)
     {
         this.firstElement = 0;
         this.lastElement = 0;
@@ -17,7 +17,7 @@ public class QueueArray implements QueueInterface
         this.growth = growth;
         if(growth <= 0)
         {
-            growth = 0;
+            this.growth = 0;
         }
         queue = new Object[size];
     }
@@ -30,7 +30,7 @@ public class QueueArray implements QueueInterface
 
     public int size()
     {
-        return (size - firstElement + lastElement) % size;
+        return (lastElement - firstElement + size) % size;
     }
 
     //first

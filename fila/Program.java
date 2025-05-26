@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Program
 {
-    private static QueueArray queue;
+    private static QueueRoundArray queue;
 
     public static void main(String[] args)
     {
@@ -49,7 +49,7 @@ public class Program
 
     public void Quest1()
     {
-        queue = new QueueArray(10, 10);
+        queue = new QueueRoundArray(10, 10);
 
         queue.enqueue(5);
         queue.enqueue(3);
@@ -75,7 +75,7 @@ public class Program
     public void Quest2()
     {
         // Teste com incremento fixo
-        QueueArray queueIncrement = new QueueArray(5, 5);
+        QueueRoundArray queueIncrement = new QueueRoundArray(5, 5);
         queueIncrement.enqueue(1);
         queueIncrement.enqueue(2);
         queueIncrement.enqueue(3);
@@ -83,7 +83,7 @@ public class Program
         System.out.println("Tamanho (incremento): " + queueIncrement.size()); // 3
 
         // Teste com duplicação
-        QueueArray queueDoubling = new QueueArray(5, 0);
+        QueueRoundArray queueDoubling = new QueueRoundArray(5, 0);
         queueDoubling.enqueue(10);
         queueDoubling.enqueue(20);
         queueDoubling.enqueue(30);
@@ -93,7 +93,7 @@ public class Program
 
     public void Quest4()
     {
-        queue = new QueueArray(10, 10);
+        queue = new QueueRoundArray(10, 10);
 
         queue.enqueue(1);
         queue.enqueue(2);

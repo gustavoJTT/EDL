@@ -1,6 +1,6 @@
 package Pilha;
 
-import Exceptions.EEmptyStack;
+import Excesao.EEmptyStack;
 
 public interface StackInterface
 {

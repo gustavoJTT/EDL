@@ -1,7 +1,7 @@
 package Vector;
 
-import Exceptions.EEmptyVector;
-import Exceptions.ERankOOL;
+import Excesao.EEmptyVector;
+import Excesao.ERankOOL;
 
 public interface VectorInterface
 {

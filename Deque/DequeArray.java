@@ -1,6 +1,6 @@
 package Deque;
 
-import Exceptions.EEmptyDeque;
+import Excesao.EEmptyDeque;
 
 public class DequeArray implements DequeInterface
 {

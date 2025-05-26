@@ -1,4 +1,4 @@
-package Exceptions;
+package Excesao;
 
 public class EEmptyVector extends RuntimeException
 {

@@ -1,5 +1,5 @@
 package Pilha.PilhaEncadeada;
-import Exceptions.EEmptyStack;
+import Excesao.EEmptyStack;
 import Node.Node;
 
 public class LinkedStack implements LinkedStackInterface
@@ -10,7 +10,6 @@ public class LinkedStack implements LinkedStackInterface
     public LinkedStack(int size)
     {
         this.head = null;
-        this.size = size;
     }
 
     //isEmpty & size

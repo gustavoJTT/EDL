@@ -1,6 +1,6 @@
 package Deque;
 
-import Exceptions.EEmptyDeque;
+import Excesao.EEmptyDeque;
 
 public class Program {
     private static DequeArray array;

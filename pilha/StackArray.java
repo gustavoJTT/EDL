@@ -1,6 +1,6 @@
 package Pilha;
 
-import Exceptions.EEmptyStack;
+import Excesao.EEmptyStack;
 
 public class StackArray implements StackInterface
 {
@@ -14,7 +14,7 @@ public class StackArray implements StackInterface
         this.growth = growth;
         if(growth <= 0)
         {
-            growth = 0;
+            this.growth = 0;
         }
         stack = new Object[size];
     }
@@ -57,7 +57,7 @@ public class StackArray implements StackInterface
             
             Object newStack[] = new Object[size];
             for(int newPosition = 0; newPosition < size(); newPosition++)
-            {
+            {   
                 newStack[newPosition] = stack[newPosition];
             }
             stack = newStack;

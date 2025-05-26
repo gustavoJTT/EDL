@@ -1,6 +1,6 @@
 package Fila;
 
-import Exceptions.EEmptyQueue;
+import Excesao.EEmptyQueue;
 
 public interface QueueInterface
 {

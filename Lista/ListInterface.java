@@ -1,6 +1,6 @@
 package Lista;
-import Exceptions.EEmptyList;
-import Exceptions.EInvalidNode;
+import Excesao.EEmptyList;
+import Excesao.EInvalidNode;
 import Node.Node;
 
 public interface ListInterface

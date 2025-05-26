@@ -1,5 +1,5 @@
 package Lista.ListaDuplamenteEncadeada;
-import Exceptions.EEmptyList;
+import Excesao.EEmptyList;
 import Lista.ListInterface;
 import Node.Node;
 
