@@ -1,15 +1,14 @@
 package Lista.ListaDuplamenteEncadeada;
+
 import Excesao.EEmptyList;
 import Lista.ListInterface;
 import Node.Node;
 
-public class DLinkedList implements ListInterface
-{
+public class DLinkedList implements ListInterface {
     private Node head, tail;
     private int size;
 
-    public DLinkedList()
-    {
+    public DLinkedList() {
         head = new Node(null);
         tail = new Node(null);
         head.setNext(tail);
@@ -17,89 +16,71 @@ public class DLinkedList implements ListInterface
         size = 0;
     }
 
-    //isEmpty & size
-    public boolean isEmpty()
-    {
+    // isEmpty & size
+    public boolean isEmpty() {
         return size == 0;
     }
 
-    public int size()
-    {
+    public int size() {
         return size;
     }
 
-    //is*
-    public boolean isFirst(Node node) throws EEmptyList
-    {
-        if(isEmpty())
-        {
+    // is*
+    public boolean isFirst(Node node) throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
         return node == head;
     }
 
-    public boolean isLast(Node node) throws EEmptyList
-    {
-        if(isEmpty())
-        {
+    public boolean isLast(Node node) throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
         return node == tail;
     }
 
-    //first & last
-    public Node first() throws EEmptyList
-    {
-        if(isEmpty())
-        {
+    // first & last
+    public Node first() throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
         return head;
     }
 
-    public Node last() throws EEmptyList
-    {
-        if(isEmpty())
-        {
+    public Node last() throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
         return tail;
     }
 
-    //before & after
-    public Node before(Node node) throws EEmptyList
-    {
-        if(isEmpty())
-        {
+    // before & after
+    public Node before(Node node) throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
         return node.getPrevious();
     }
 
-    public Node after(Node node) throws EEmptyList
-    {
-        if(isEmpty())
-        {
+    public Node after(Node node) throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
         return node.getNext();
     }
 
-    //reeplace
-    public void replaceElement(Node node, Object object) throws EEmptyList
-    {
-        if (isEmpty()) 
-        {
+    // reeplace
+    public void replaceElement(Node node, Object object) throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
         node.setElement(object);
     }
 
-    //swap
-    public void swapElement(Node firstNode, Node secondNode) throws EEmptyList
-    {
-        if(isEmpty())
-        {
+    // swap
+    public void swapElement(Node firstNode, Node secondNode) throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
 
@@ -109,11 +90,9 @@ public class DLinkedList implements ListInterface
         secondNode.setElement(temp);
     }
 
-    //insert*
-    public void insertBefore(Node node, Object object) throws EEmptyList
-    {
-        if(isEmpty())
-        {
+    // insert*
+    public void insertBefore(Node node, Object object) throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
 
@@ -126,10 +105,8 @@ public class DLinkedList implements ListInterface
         size++;
     }
 
-    public void insertAfter(Node node, Object object) throws EEmptyList
-    {
-        if(isEmpty())
-        {
+    public void insertAfter(Node node, Object object) throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
         Node newNode = new Node(object);
@@ -141,10 +118,8 @@ public class DLinkedList implements ListInterface
         size++;
     }
 
-    public void insertFirst(Object object) throws EEmptyList
-    {
-        if(isEmpty())
-        {
+    public void insertFirst(Object object) throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
         Node newNode = new Node(object);
@@ -156,10 +131,8 @@ public class DLinkedList implements ListInterface
         size++;
     }
 
-    public void insertLast(Object object) throws EEmptyList
-    {
-        if(isEmpty())
-        {
+    public void insertLast(Object object) throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
         Node newNode = new Node(object);
@@ -171,21 +144,18 @@ public class DLinkedList implements ListInterface
         size++;
     }
 
-    //remove
-    public void remove(Node node) throws EEmptyList
-    {
-        if(isEmpty())
-        {
+    // remove
+    public void remove(Node node) throws EEmptyList {
+        if (isEmpty()) {
             throw new EEmptyList("Lista vaiza");
         }
         node.getPrevious().setNext(node.getNext());
         node.getNext().setPrevious(node.getPrevious());
     }
 
-    //print
-    public void print()
-    {
-        Node temp = head.getNext(); 
+    // print
+    public void print() {
+        Node temp = head.getNext();
         while (temp.getElement() != null) {
             System.out.println(temp.getElement());
             temp = temp.getNext();

@@ -2,8 +2,7 @@ package Fila;
 
 import Excesao.EEmptyQueue;
 
-public interface QueueInterface
-{
+public interface QueueInterface {
     public int size();
     public boolean isEmpty();
     public Object first() throws EEmptyQueue;

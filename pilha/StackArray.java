@@ -2,62 +2,50 @@ package Pilha;
 
 import Excesao.EEmptyStack;
 
-public class StackArray implements StackInterface
-{
-    private int size, growth, currentPosition;
+public class StackArray implements StackInterface {
+    private int capacity, growth, currentPosition;
     private Object stack[];
 
-    public StackArray(int size, int growth)
-    {
-        this. currentPosition = -1;
-        this.size = size;
+    public StackArray(int capacity, int growth) {
+        this.currentPosition = -1;
+        this.capacity = capacity;
         this.growth = growth;
-        if(growth <= 0)
-        {
+        if (growth <= 0) {
             this.growth = 0;
         }
-        stack = new Object[size];
+        stack = new Object[capacity];
     }
 
-    //isEmpty & size
-    public boolean isEmpty()
-    {
+    // isEmpty & capacity
+    public boolean isEmpty() {
         return currentPosition == -1;
     }
 
-    public int size()
-    {
+    public int size() {
         return currentPosition + 1;
     }
 
-    //top
-    public Object top() throws EEmptyStack
-    {
-        if(isEmpty())
-        {
+    // top
+    public Object top() throws EEmptyStack {
+        if (isEmpty()) {
             throw new EEmptyStack("Pilha vazia");
         }
 
         return stack[currentPosition];
     }
 
-    //push & pop
-    public void push(Object o)
-    {
-        if(currentPosition >= size - 1) //ou if(currentPosition + 1 == size)
+    // push & pop
+    public void push(Object o) {
+        if (currentPosition >= capacity - 1) // ou if(currentPosition + 1 == capacity)
         {
-            if(growth == 0)
-            {
-                size *= 2;
+            if (growth == 0) {
+                capacity *= 2;
+            } else {
+                capacity += growth;
             }
-            else
-            {
-                size += growth;
-            }
-            
-            Object newStack[] = new Object[size];
-            for(int newPosition = 0; newPosition < size(); newPosition++)
-            {   
+
+            Object newStack[] = new Object[capacity];
+            for (int newPosition = 0; newPosition < size(); newPosition++) {
                 newStack[newPosition] = stack[newPosition];
             }
             stack = newStack;
@@ -65,31 +53,25 @@ public class StackArray implements StackInterface
         stack[++currentPosition] = o;
     }
 
-    public Object pop() throws EEmptyStack
-    {
-        if(isEmpty())
-        {
+    public Object pop() throws EEmptyStack {
+        if (isEmpty()) {
             throw new EEmptyStack("Pilha vazia");
         }
         Object removed = stack[currentPosition--];
         return removed;
     }
 
-    //print & empty
-    public void printStack() throws EEmptyStack
-    {
-        if(isEmpty())
-        {
+    // print & empty
+    public void printStack() throws EEmptyStack {
+        if (isEmpty()) {
             throw new EEmptyStack("Pilha vazia");
         }
-        for(int i = 0; i <= currentPosition; i++)
-        {
-            System.out.println(String.format("Posição %d -> %s | Capacidade: %d", i, stack[i], size));
+        for (int i = 0; i <= currentPosition; i++) {
+            System.out.println(String.format("Posição %d -> %s | Capacidade: %d", i, stack[i], capacity));
         }
     }
 
-    public void empty()
-    {
+    public void empty() {
         currentPosition = -1;
     }
 }

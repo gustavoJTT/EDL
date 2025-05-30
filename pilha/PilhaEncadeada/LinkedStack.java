@@ -1,51 +1,44 @@
 package Pilha.PilhaEncadeada;
+
 import Excesao.EEmptyStack;
 import Node.Node;
 
-public class LinkedStack implements LinkedStackInterface
-{
+public class LinkedStack implements LinkedStackInterface {
     private int size;
     private Node head;
 
-    public LinkedStack(int size)
-    {
+    public LinkedStack(int size) {
         this.head = null;
+        this.size = 0;
     }
 
-    //isEmpty & size
-    public boolean isEmpty()
-    {
+    // isEmpty & size
+    public boolean isEmpty() {
         return head == null;
     }
 
-    public int size()
-    {
+    public int size() {
         return size;
     }
 
-    //top
-    public Object top() throws EEmptyStack
-    {
-        if(isEmpty())
-        {
+    // top
+    public Object top() throws EEmptyStack {
+        if (isEmpty()) {
             throw new EEmptyStack("Pilha vazia");
         }
         return head.getElement();
     }
 
-    //push pop
-    public void push(Object newElement)
-    {
+    // push pop
+    public void push(Object newElement) {
         Node newNode = new Node(newElement);
-        newNode.setNext(head);  //liga o novo no atual
+        newNode.setNext(head); // liga o novo no atual
         head = newNode;
         size++;
     }
 
-    public Object pop() throws EEmptyStack
-    {
-        if(isEmpty())
-        {
+    public Object pop() throws EEmptyStack {
+        if (isEmpty()) {
             throw new EEmptyStack("Pilha vazia");
         }
         Object o = head.getElement();

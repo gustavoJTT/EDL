@@ -1,8 +1,8 @@
 package Pilha.pilhaRubroNegra;
+
 import Excesao.EEmptyStack;
 
-public class RbProgram
-{
+public class RbProgram {
     public static void main(String[] args) {
         try {
             // 1. Criar uma pilha rubro-negra com capacidade inicial 4

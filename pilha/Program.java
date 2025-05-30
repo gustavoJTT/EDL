@@ -1,15 +1,13 @@
 package Pilha;
+
 import java.util.Scanner;
 
-public class Program
-{
-    private static StackArray stack ;
+public class Program {
+    private static StackArray stack;
 
-    public static void main(String[] args) 
-    {
+    public static void main(String[] args) {
         boolean menuState = true;
-        while (menuState) 
-        {
+        while (menuState) {
             System.out.println("");
             System.out.println("Selecione a questão");
             System.out.println("1 -> Questão 1");
@@ -21,8 +19,7 @@ public class Program
             System.out.print("Opção: ");
             int quest = questScanner.nextInt();
 
-            switch (quest) 
-            {
+            switch (quest) {
                 case 1:
                     new Program().Quest1();
                     break;
@@ -47,8 +44,7 @@ public class Program
         }
     }
 
-    public void Quest1()
-    {
+    public void Quest1() {
         stack = new StackArray(10, 0);
 
         stack.push(5);
@@ -72,12 +68,10 @@ public class Program
         stack.printStack();
     }
 
-    public void Quest2() 
-    {
+    public void Quest2() {
         int[] numberElements = { 10, 100, 1000, 0, 10000, 100000, 1000000 };
 
-        while (true) 
-        {
+        while (true) {
             System.out.println("");
             System.out.println("Selecione uma opção;");
             System.out.println("1 -> 10 elementos");
@@ -88,18 +82,15 @@ public class Program
             System.out.println("6 -> 1000000 elementos");
             System.out.println("0 -> sair");
 
-            try (Scanner selectionScanner = new Scanner(System.in))
-            {
+            try (Scanner selectionScanner = new Scanner(System.in)) {
                 System.out.print("Opção: ");
                 int operation = selectionScanner.nextInt();
 
-                if (operation == 0) 
-                {
+                if (operation == 0) {
                     break;
                 }
 
-                if (operation < 1 || operation > 6) 
-                {
+                if (operation < 1 || operation > 6) {
                     System.out.println("Opção inválida!");
                     continue;
                 }
@@ -111,13 +102,11 @@ public class Program
         }
     }
 
-    public void testTime(int numberElements)
-    {
+    public void testTime(int numberElements) {
         System.out.println("");
         // 10 growth
         long startTime = System.nanoTime();
-        for (int i = 0; i < numberElements; i++)
-        {
+        for (int i = 0; i < numberElements; i++) {
             stack = new StackArray(numberElements, 10);
             stack.push(i);
         }
@@ -126,8 +115,7 @@ public class Program
 
         // 100 growth
         long startTime100 = System.nanoTime();
-        for (int i = 0; i < numberElements; i++)
-        {
+        for (int i = 0; i < numberElements; i++) {
             stack = new StackArray(numberElements, 100);
             stack.push(i);
         }
@@ -136,8 +124,7 @@ public class Program
 
         // 1000 growth
         long startTime1000 = System.nanoTime();
-        for (int i = 0; i < numberElements; i++)
-        {
+        for (int i = 0; i < numberElements; i++) {
             stack = new StackArray(numberElements, 1000);
             stack.push(i);
         }
@@ -146,8 +133,7 @@ public class Program
 
         // double growth
         long startTimeDouble = System.nanoTime();
-        for (int i = 0; i < numberElements; i++)
-        {
+        for (int i = 0; i < numberElements; i++) {
             stack = new StackArray(numberElements, 0);
             stack.push(i);
         }
@@ -156,8 +142,7 @@ public class Program
 
     }
 
-    public void Quest4()
-    {
+    public void Quest4() {
         stack = new StackArray(10, 0);
 
         stack.push(1);
@@ -170,8 +155,7 @@ public class Program
         stack.empty();
     }
 
-    public void Quest5()
-    {
+    public void Quest5() {
 
     }
 }

@@ -2,8 +2,7 @@ package Deque;
 
 import Excesao.EEmptyDeque;
 
-public interface DequeInterface
-{
+public interface DequeInterface {
     public int size();
     public boolean isEmpty();
     public Object first() throws EEmptyDeque;

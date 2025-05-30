@@ -1,9 +1,9 @@
 package Sequencica;
+
 import Excesao.EEmptySequence;
 import Node.Node;
 
-public interface SequenceInterface
-{
+public interface SequenceInterface {
     // metodos genericos
     public int size();
     public boolean isEmpty();

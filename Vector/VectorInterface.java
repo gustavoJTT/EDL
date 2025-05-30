@@ -3,8 +3,7 @@ package Vector;
 import Excesao.EEmptyVector;
 import Excesao.ERankOOL;
 
-public interface VectorInterface
-{
+public interface VectorInterface {
     public int size();
     public boolean isEmpty();
     public Object elemAtRank(int rank) throws EEmptyVector, ERankOOL;

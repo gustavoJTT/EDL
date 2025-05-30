@@ -1,8 +1,7 @@
 package Pilha.pilhaRubroNegra;
 import Excesao.EEmptyStack;
 
-public interface RBStackInterface
-{
+public interface RBStackInterface {
     public int sizeStack();
     public void verifySpace();
     public void resizeElements(int newCapacity);

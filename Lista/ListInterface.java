@@ -3,8 +3,7 @@ import Excesao.EEmptyList;
 import Excesao.EInvalidNode;
 import Node.Node;
 
-public interface ListInterface
-{
+public interface ListInterface {
     public int size();
     public boolean isEmpty();
     public boolean isFirst(Node node) throws EEmptyList;

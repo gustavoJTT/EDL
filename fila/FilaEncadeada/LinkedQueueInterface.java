@@ -1,8 +1,7 @@
 package Fila.FilaEncadeada;
 import Excesao.EEmptyQueue;
 
-public interface LinkedQueueInterface
-{
+public interface LinkedQueueInterface {
     public int size();
     public boolean isEmpty();
     public Object first() throws EEmptyQueue;
