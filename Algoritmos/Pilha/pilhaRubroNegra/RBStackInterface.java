@@ -1,4 +1,4 @@
-package Pilha.pilhaRubroNegra;
+package Pilha.PilhaRubroNegra;
 import Excesao.EEmptyStack;
 
 public interface RBStackInterface {

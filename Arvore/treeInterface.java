@@ -1,7 +1,7 @@
 import Node.Node;
 import java.util.Iterator;
 
-public interface treeInterface {
+public interface TreeInterface {
     //genericos
     public boolean isEmpty();
     public int size();
