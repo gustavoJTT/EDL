@@ -6,7 +6,6 @@ public interface TreeInterface {
     public boolean isEmpty();
     public int size();
     public int height(Node node);
-    //public int heightSlow();
     public Iterator<Object> elements();
     public Iterator<Node> nodes();
 

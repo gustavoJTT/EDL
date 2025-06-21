@@ -12,13 +12,13 @@ public class LinkedStack implements LinkedStackInterface {
         this.size = 0;
     }
 
-    // isEmpty & size
+    // isEmpty & this.size
     public boolean isEmpty() {
-        return head == null;
+        return this.head == null;
     }
 
     public int size() {
-        return size;
+        return this.size;
     }
 
     // top
@@ -26,24 +26,24 @@ public class LinkedStack implements LinkedStackInterface {
         if (isEmpty()) {
             throw new EEmptyStack("Pilha vazia");
         }
-        return head.getElement();
+        return this.head.getElement();
     }
 
     // push pop
     public void push(Object newElement) {
         Node newNode = new Node(newElement);
-        newNode.setNext(head); // liga o novo no atual
-        head = newNode;
-        size++;
+        newNode.setNext(this.head); // liga o novo no atual
+        this.head = newNode;
+        this.size++;
     }
 
     public Object pop() throws EEmptyStack {
         if (isEmpty()) {
             throw new EEmptyStack("Pilha vazia");
         }
-        Object o = head.getElement();
-        head = head.getNext();
-        size--;
+        Object o = this.head.getElement();
+        this.head = this.head.getNext();
+        this.size--;
         return o;
     }
 }

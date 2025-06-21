@@ -13,13 +13,13 @@ public class LinkedQueue implements LinkedQueueInterface {
         this.tail = null;
     }
 
-    // isEmpty & size
+    // isEmpty & this.size
     public boolean isEmpty() {
-        return head == null;
+        return this.head == null;
     }
 
     public int size() {
-        return size;
+        return this.size;
     }
 
     // first
@@ -27,7 +27,7 @@ public class LinkedQueue implements LinkedQueueInterface {
         if (isEmpty()) {
             throw new EEmptyQueue("Fila vazia");
         }
-        return head.getElement();
+        return this.head.getElement();
     }
 
     // align & misAlign
@@ -35,24 +35,24 @@ public class LinkedQueue implements LinkedQueueInterface {
         Node newNode = new Node(newObject);
 
         if (isEmpty()) {
-            head = newNode;
+            this.head = newNode;
         } else {
-            tail.setNext(newNode);
+            this.tail.setNext(newNode);
         }
-        tail = newNode;
-        size++;
+        this.tail = newNode;
+        this.size++;
     }
 
     public Object dequeue() throws EEmptyQueue {
         if (isEmpty()) {
             throw new EEmptyQueue("Fila vazia");
         }
-        Object element = head.getElement();
-        head = head.getNext();
-        size--;
+        Object element = this.head.getElement();
+        this.head = this.head.getNext();
+        this.size--;
 
         if (isEmpty()) {
-            tail = null;
+            this.tail = null;
         }
         return element;
     }

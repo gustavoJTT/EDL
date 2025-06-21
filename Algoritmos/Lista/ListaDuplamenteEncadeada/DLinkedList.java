@@ -9,20 +9,20 @@ public class DLinkedList implements ListInterface {
     private int size;
 
     public DLinkedList() {
-        head = new Node(null);
-        tail = new Node(null);
-        head.setNext(tail);
-        tail.setPrevious(head);
-        size = 0;
+        this.head = new Node(null);
+        this.tail = new Node(null);
+        this.head.setNext(this.tail);
+        this.tail.setPrevious(this.head);
+        this.size = 0;
     }
 
-    // isEmpty & size
+    // isEmpty & this.size
     public boolean isEmpty() {
-        return size == 0;
+        return this.size == 0;
     }
 
     public int size() {
-        return size;
+        return this.size;
     }
 
     // is*
@@ -30,14 +30,14 @@ public class DLinkedList implements ListInterface {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        return node == head;
+        return node == this.head;
     }
 
     public boolean isLast(Node node) throws EEmptyList {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        return node == tail;
+        return node == this.tail;
     }
 
     // first & last
@@ -45,14 +45,14 @@ public class DLinkedList implements ListInterface {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        return head;
+        return this.head;
     }
 
     public Node last() throws EEmptyList {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        return tail;
+        return this.tail;
     }
 
     // before & after
@@ -102,7 +102,7 @@ public class DLinkedList implements ListInterface {
         newNode.setPrevious(node.getPrevious());
         node.getPrevious().setNext(newNode);
         node.setPrevious(newNode);
-        size++;
+        this.size++;
     }
 
     public void insertAfter(Node node, Object object) throws EEmptyList {
@@ -115,7 +115,7 @@ public class DLinkedList implements ListInterface {
         newNode.setPrevious(node);
         node.getNext().setPrevious(newNode);
         node.setNext(newNode);
-        size++;
+        this.size++;
     }
 
     public void insertFirst(Object object) throws EEmptyList {
@@ -124,11 +124,11 @@ public class DLinkedList implements ListInterface {
         }
         Node newNode = new Node(object);
 
-        newNode.setPrevious(head);
-        newNode.setNext(head.getNext());
-        head.getNext().setPrevious(newNode);
-        head.setNext(newNode);
-        size++;
+        newNode.setPrevious(this.head);
+        newNode.setNext(this.head.getNext());
+        this.head.getNext().setPrevious(newNode);
+        this.head.setNext(newNode);
+        this.size++;
     }
 
     public void insertLast(Object object) throws EEmptyList {
@@ -137,11 +137,11 @@ public class DLinkedList implements ListInterface {
         }
         Node newNode = new Node(object);
 
-        newNode.setNext(tail);
-        newNode.setPrevious(tail.getPrevious());
-        tail.getPrevious().setNext(newNode);
-        tail.setNext(newNode);
-        size++;
+        newNode.setNext(this.tail);
+        newNode.setPrevious(this.tail.getPrevious());
+        this.tail.getPrevious().setNext(newNode);
+        this.tail.setNext(newNode);
+        this.size++;
     }
 
     // remove
@@ -155,7 +155,7 @@ public class DLinkedList implements ListInterface {
 
     // print
     public void print() {
-        Node temp = head.getNext();
+        Node temp = this.head.getNext();
         while (temp.getElement() != null) {
             System.out.println(temp.getElement());
             temp = temp.getNext();

@@ -11,19 +11,19 @@ public class VectorArray implements VectorInterface {
         this.lastElement = 0;
         this.size = size;
         this.growth = growth;
-        if (growth <= 0) {
+        if (this.growth <= 0) {
             this.growth = 0;
         }
-        array = new Object[size];
+        this.array = new Object[this.size];
     }
 
-    // isEmpty & size
+    // isEmpty & this.size
     public boolean isEmpty() {
-        return lastElement == 0;
+        return this.lastElement == 0;
     }
 
     public int size() {
-        return lastElement;
+        return this.lastElement;
     }
 
     // element
@@ -35,7 +35,7 @@ public class VectorArray implements VectorInterface {
         if (rank < 0 || rank >= size()) {
             throw new ERankOOL("Rank fora dos limites");
         }
-        return array[rank];
+        return this.array[rank];
     }
 
     // replace
@@ -47,8 +47,8 @@ public class VectorArray implements VectorInterface {
         if (rank < 0 || rank >= size()) {
             throw new ERankOOL("Rank fora dos limites");
         }
-        Object old = array[rank];
-        array[rank] = newObject;
+        Object old = this.array[rank];
+        this.array[rank] = newObject;
         return old;
     }
 
@@ -58,30 +58,30 @@ public class VectorArray implements VectorInterface {
             throw new ERankOOL("Rank fora dos limites");
         }
 
-        if (size() == size) {
+        if (size() == this.size) {
             int newSize;
-            if (growth == 0) {
-                newSize = size * 2;
+            if (this.growth == 0) {
+                newSize = this.size * 2;
             } else {
-                newSize = size + growth;
+                newSize = this.size + this.growth;
             }
             Object newArray[] = new Object[newSize];
 
             for (int i = 0; i < size(); i++) {
                 if (i < rank) {
-                    newArray[i] = array[i];
+                    newArray[i] = this.array[i];
                 } else {
-                    newArray[i + 1] = array[i];
+                    newArray[i + 1] = this.array[i];
                 }
             }
-            size = newSize;
-            array = newArray;
+            this.size = newSize;
+            this.array = newArray;
         }
         for (int i = size(); i > rank; i--) {
-            array[i] = array[i - 1];
+            this.array[i] = this.array[i - 1];
         }
-        array[rank] = newObject;
-        lastElement++;
+        this.array[rank] = newObject;
+        this.lastElement++;
     }
 
     // remove
@@ -93,15 +93,15 @@ public class VectorArray implements VectorInterface {
             throw new ERankOOL("Rank fora dos limites");
         }
 
-        Object removed = array[rank];
+        Object removed = this.array[rank];
 
         // Move todos os elementos após o rank uma posição para trás
         for (int i = rank; i < size() - 1; i++) {
-            array[i] = array[i + 1];
+            this.array[i] = this.array[i + 1];
         }
 
-        array[size() - 1] = null; // Remove a referência do último elemento
-        lastElement--;
+        this.array[size() - 1] = null; // Remove a referência do último elemento
+        this.lastElement--;
 
         return removed;
     }

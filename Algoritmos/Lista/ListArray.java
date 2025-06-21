@@ -9,18 +9,18 @@ public class ListArray implements ListInterface {
     private Node array[];
 
     public ListArray(int capacity) {
-        size = 0;
+        this.size = 0;
         this.capacity = capacity;
-        array = new Node[capacity];
+        this.array = new Node[this.capacity];
     }
 
-    // isEmpty & size
+    // isEmpty & this.size
     public boolean isEmpty() {
         return size() == 0;
     }
 
     public int size() {
-        return size;
+        return this.size;
     }
 
     // is*
@@ -28,14 +28,14 @@ public class ListArray implements ListInterface {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        return array[0] == node;
+        return this.array[0] == node;
     }
 
     public boolean isLast(Node node) throws EEmptyList {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        return array[size() - 1] == node;
+        return this.array[size() - 1] == node;
     }
 
     // first & last
@@ -43,14 +43,14 @@ public class ListArray implements ListInterface {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        return array[0];
+        return this.array[0];
     }
 
     public Node last() throws EEmptyList {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        return array[size() - 1];
+        return this.array[size() - 1];
     }
 
     // before & after
@@ -58,13 +58,13 @@ public class ListArray implements ListInterface {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        if (array[0] == node) {
+        if (this.array[0] == node) {
             throw new EInvalidNode("Não existe nó anterior ao primeiro");
         }
 
         for (int i = 1; i < size(); i++) {
-            if (array[i] == node) {
-                return array[i - 1];
+            if (this.array[i] == node) {
+                return this.array[i - 1];
             }
         }
         throw new EInvalidNode("Nó inválido");
@@ -76,12 +76,12 @@ public class ListArray implements ListInterface {
         }
 
         for (int i = 0; i < size() - 1; i++) {
-            if (array[i] == node) {
-                return array[i + 1];
+            if (this.array[i] == node) {
+                return this.array[i + 1];
             }
         }
 
-        if (array[size() - 1] == node) {
+        if (this.array[size() - 1] == node) {
             throw new EInvalidNode("Nó é o último da lista");
         }
 
@@ -95,7 +95,7 @@ public class ListArray implements ListInterface {
         }
 
         for (int i = 0; i < size(); i++) {
-            if (array[i] == node) {
+            if (this.array[i] == node) {
                 node.setElement(object);
                 return;
             }
@@ -113,11 +113,11 @@ public class ListArray implements ListInterface {
         Node foundSecondNode = null;
 
         for (int i = 0; i < size(); i++) {
-            if (array[i] == firstNode) {
-                foundFirstNode = array[i];
+            if (this.array[i] == firstNode) {
+                foundFirstNode = this.array[i];
             }
-            if (array[i] == secondNode) {
-                foundSecondNode = array[i];
+            if (this.array[i] == secondNode) {
+                foundSecondNode = this.array[i];
             }
         }
 
@@ -136,13 +136,13 @@ public class ListArray implements ListInterface {
             throw new EEmptyList("Lista vazia");
         }
 
-        if (size() == capacity) {
+        if (size() == this.capacity) {
             expandCapacity();
         }
 
         int position = -1;
         for (int i = 0; i < size(); i++) {
-            if (array[i] == node) {
+            if (this.array[i] == node) {
                 position = i;
                 break;
             }
@@ -152,12 +152,12 @@ public class ListArray implements ListInterface {
             throw new EInvalidNode("Nó inválido");
         }
 
-        for (int i = size; i > position; i--) {
-            array[i] = array[i - 1];
+        for (int i = this.size; i > position; i--) {
+            this.array[i] = this.array[i - 1];
         }
 
-        array[position] = new Node(object);
-        size++;
+        this.array[position] = new Node(object);
+        this.size++;
     }
 
     public void insertAfter(Node node, Object object) throws EEmptyList, EInvalidNode {
@@ -165,13 +165,13 @@ public class ListArray implements ListInterface {
             throw new EEmptyList("Lista vazia");
         }
 
-        if (size() == capacity) {
+        if (size() == this.capacity) {
             expandCapacity();
         }
 
         int position = -1;
         for (int i = 0; i < size(); i++) {
-            if (array[i] == node) {
+            if (this.array[i] == node) {
                 position = i;
                 break;
             }
@@ -181,34 +181,34 @@ public class ListArray implements ListInterface {
             throw new EInvalidNode("Nó inválido");
         }
 
-        for (int i = size; i > position + 1; i--) {
-            array[i] = array[i - 1];
+        for (int i = this.size; i > position + 1; i--) {
+            this.array[i] = this.array[i - 1];
         }
 
-        array[position + 1] = new Node(object);
-        size++;
+        this.array[position + 1] = new Node(object);
+        this.size++;
     }
 
     public void insertFirst(Object object) {
-        if (size() == capacity) {
+        if (size() == this.capacity) {
             expandCapacity();
         }
 
-        for (int i = size; i > 0; i--) {
-            array[i] = array[i - 1];
+        for (int i = this.size; i > 0; i--) {
+            this.array[i] = this.array[i - 1];
         }
 
-        array[0] = new Node(object);
-        size++;
+        this.array[0] = new Node(object);
+        this.size++;
     }
 
     public void insertLast(Object object) {
-        if (size() == capacity) {
+        if (size() == this.capacity) {
             expandCapacity();
         }
 
-        array[size] = new Node(object);
-        size++;
+        this.array[this.size] = new Node(object);
+        this.size++;
     }
 
     // remove
@@ -219,7 +219,7 @@ public class ListArray implements ListInterface {
 
         int position = -1;
         for (int i = 0; i < size(); i++) {
-            if (array[i] == node) {
+            if (this.array[i] == node) {
                 position = i;
                 break;
             }
@@ -229,23 +229,23 @@ public class ListArray implements ListInterface {
             throw new EInvalidNode("Nó inválido");
         }
 
-        for (int i = position; i < size - 1; i++) {
-            array[i] = array[i + 1];
+        for (int i = position; i < this.size - 1; i++) {
+            this.array[i] = this.array[i + 1];
         }
 
-        array[size - 1] = null;
-        size--;
+        this.array[this.size - 1] = null;
+        this.size--;
     }
 
     // duble
     private void expandCapacity() {
-        capacity = capacity * 2;
-        Node[] newArray = new Node[capacity];
+        this.capacity = this.capacity * 2;
+        Node[] newArray = new Node[this.capacity];
 
         for (int i = 0; i < size(); i++) {
-            newArray[i] = array[i];
+            newArray[i] = this.array[i];
         }
 
-        array = newArray;
+        this.array = newArray;
     }
 }

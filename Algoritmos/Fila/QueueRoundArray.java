@@ -11,19 +11,19 @@ public class QueueRoundArray implements QueueInterface {
         this.lastElement = 0;
         this.capacity = capacity;
         this.growth = growth;
-        if (growth <= 0) {
+        if (this.growth <= 0) {
             this.growth = 0;
         }
-        queue = new Object[capacity];
+        this.queue = new Object[this.capacity];
     }
 
-    // isEmpty & capacity
+    // isEmpty & this.capacity
     public boolean isEmpty() {
-        return firstElement == lastElement;
+        return this.firstElement == this.lastElement;
     }
 
     public int size() {
-        return (capacity - firstElement + lastElement) % capacity;
+        return (this.capacity - this.firstElement + this.lastElement) % this.capacity;
     }
 
     // first
@@ -31,59 +31,59 @@ public class QueueRoundArray implements QueueInterface {
         if (isEmpty()) {
             throw new EEmptyQueue("Fila vazia");
         }
-        return queue[firstElement];
+        return this.queue[this.firstElement];
     }
 
     // enqueue & dequeue
     public void enqueue(Object newObject) {
-        if (size() == capacity - 1) {
+        if (size() == this.capacity - 1) {
             int newSize;
-            if (growth == 0) {
-                newSize = capacity * 2;
+            if (this.growth == 0) {
+                newSize = this.capacity * 2;
             } else {
-                newSize = capacity + growth;
+                newSize = this.capacity + this.growth;
             }
             Object newQueue[] = new Object[newSize];
-            int newFirst = firstElement;
+            int newFirst = this.firstElement;
 
             for (int i = 0; i < size(); i++) {
-                newQueue[i] = queue[newFirst];
-                newFirst = (newFirst + 1) % capacity;
+                newQueue[i] = this.queue[newFirst];
+                newFirst = (newFirst + 1) % this.capacity;
             }
-            firstElement = 0;
-            lastElement = size();
-            capacity = newSize;
-            queue = newQueue;
+            this.firstElement = 0;
+            this.lastElement = size();
+            this.capacity = newSize;
+            this.queue = newQueue;
         }
-        queue[lastElement] = newObject;
-        lastElement = (lastElement + 1) % capacity;
+        this.queue[this.lastElement] = newObject;
+        this.lastElement = (this.lastElement + 1) % this.capacity;
     }
 
     public Object dequeue() throws EEmptyQueue {
         if (isEmpty()) {
             throw new EEmptyQueue("Fila vazia");
         }
-        Object removed = queue[firstElement];
-        firstElement = (firstElement + 1) % capacity;
+        Object removed = this.queue[this.firstElement];
+        this.firstElement = (this.firstElement + 1) % this.capacity;
         return removed;
     }
 
     public void reverse() {
-        Object reverseQueue[] = new Object[capacity];
+        Object reverseQueue[] = new Object[this.capacity];
 
-        for (int i = size(); i + 1 != lastElement; i--) {
-            reverseQueue[i] = queue[(lastElement - 1 - i + capacity) % capacity];
+        for (int i = size(); i + 1 != this.lastElement; i--) {
+            reverseQueue[i] = this.queue[(this.lastElement - 1 - i + this.capacity) % this.capacity];
         }
-        firstElement = 0;
-        lastElement = size();
-        queue = reverseQueue;
+        this.firstElement = 0;
+        this.lastElement = size();
+        this.queue = reverseQueue;
     }
 
     public void print() {
-        System.out.println("Fila (tamanho total: " + capacity + ")");
-        int current = firstElement;
+        System.out.println("Fila (tamanho total: " + this.capacity + ")");
+        int current = this.firstElement;
         for (int i = 0; i < size(); i++) {
-            System.out.print("[" + i + "]: " + queue[current]);
+            System.out.print("[" + i + "]: " + this.queue[current]);
             if (i == 0) {
                 System.out.print(" <- início");
             }
@@ -91,7 +91,7 @@ public class QueueRoundArray implements QueueInterface {
                 System.out.print(" <- fim");
             }
             System.out.println();
-            current = (current + 1) % capacity;
+            current = (current + 1) % this.capacity;
         }
         System.out.println("Tamanho atual: " + size());
         System.out.println("Está vazia? " + isEmpty());

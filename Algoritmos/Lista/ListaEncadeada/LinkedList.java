@@ -10,18 +10,18 @@ public class LinkedList implements ListInterface {
     private int size;
 
     public LinkedList() {
-        head = null;
-        tail = null;
-        size = 0;
+        this.head = null;
+        this.tail = null;
+        this.size = 0;
     }
 
-    // isEmpty & size
+    // isEmpty & this.size
     public int size() {
-        return size;
+        return this.size;
     }
 
     public boolean isEmpty() {
-        return size == 0;
+        return this.size == 0;
     }
 
     // is*
@@ -29,14 +29,14 @@ public class LinkedList implements ListInterface {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        return head == node;
+        return this.head == node;
     }
 
     public boolean isLast(Node node) throws EEmptyList {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        return tail == node;
+        return this.tail == node;
     }
 
     // first & last
@@ -44,14 +44,14 @@ public class LinkedList implements ListInterface {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        return head;
+        return this.head;
     }
 
     public Node last() throws EEmptyList {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        return tail;
+        return this.tail;
     }
 
     // before & after
@@ -59,11 +59,11 @@ public class LinkedList implements ListInterface {
         if (isEmpty()) {
             throw new EEmptyList("Lista vazia");
         }
-        if (node == head) {
+        if (node == this.head) {
             throw new EInvalidNode("Não existe nó anterior ao primeiro");
         }
 
-        Node current = head;
+        Node current = this.head;
         while (current != null && current.getNext() != node) {
             current = current.getNext();
         }
@@ -80,7 +80,7 @@ public class LinkedList implements ListInterface {
             throw new EEmptyList("Lista vazia");
         }
 
-        if (node == tail) {
+        if (node == this.tail) {
             throw new EInvalidNode("Nó é o último da lista");
         }
 
@@ -98,7 +98,7 @@ public class LinkedList implements ListInterface {
             throw new EEmptyList("Lista vazia");
         }
 
-        Node current = head;
+        Node current = this.head;
         boolean found = false;
 
         while (current != null) {
@@ -123,7 +123,7 @@ public class LinkedList implements ListInterface {
         }
 
         // Verificar se os nós pertencem à lista
-        Node current = head;
+        Node current = this.head;
         boolean foundFirst = false;
         boolean foundSecond = false;
 
@@ -156,7 +156,7 @@ public class LinkedList implements ListInterface {
             throw new EEmptyList("Lista vazia");
         }
 
-        if (node == head) {
+        if (node == this.head) {
             insertFirst(object);
             return;
         }
@@ -165,7 +165,7 @@ public class LinkedList implements ListInterface {
         Node newNode = new Node(object);
         newNode.setNext(node);
         beforeNode.setNext(newNode);
-        size++;
+        this.size++;
     }
 
     public void insertAfter(Node node, Object object) throws EEmptyList, EInvalidNode {
@@ -173,7 +173,7 @@ public class LinkedList implements ListInterface {
             throw new EEmptyList("Lista vazia");
         }
 
-        Node current = head;
+        Node current = this.head;
         boolean found = false;
 
         while (current != null) {
@@ -192,39 +192,39 @@ public class LinkedList implements ListInterface {
         newNode.setNext(node.getNext());
         node.setNext(newNode);
 
-        if (node == tail) {
-            tail = newNode;
+        if (node == this.tail) {
+            this.tail = newNode;
         }
 
-        size++;
+        this.size++;
     }
 
     public void insertFirst(Object object) {
         Node newNode = new Node(object);
 
         if (isEmpty()) {
-            head = newNode;
-            tail = newNode;
+            this.head = newNode;
+            this.tail = newNode;
         } else {
-            newNode.setNext(head);
-            head = newNode;
+            newNode.setNext(this.head);
+            this.head = newNode;
         }
 
-        size++;
+        this.size++;
     }
 
     public void insertLast(Object object) {
         Node newNode = new Node(object);
 
         if (isEmpty()) {
-            head = newNode;
-            tail = newNode;
+            this.head = newNode;
+            this.tail = newNode;
         } else {
-            tail.setNext(newNode);
-            tail = newNode;
+            this.tail.setNext(newNode);
+            this.tail = newNode;
         }
 
-        size++;
+        this.size++;
     }
 
     // remove
@@ -233,22 +233,22 @@ public class LinkedList implements ListInterface {
             throw new EEmptyList("Lista vazia");
         }
 
-        if (node == head) {
-            head = head.getNext();
-            if (head == null) {
-                tail = null;
+        if (node == this.head) {
+            this.head = this.head.getNext();
+            if (this.head == null) {
+                this.tail = null;
             }
-            size--;
+            this.size--;
             return;
         }
 
         Node beforeNode = before(node);
         beforeNode.setNext(node.getNext());
 
-        if (node == tail) {
-            tail = beforeNode;
+        if (node == this.tail) {
+            this.tail = beforeNode;
         }
 
-        size--;
+        this.size--;
     }
 }
