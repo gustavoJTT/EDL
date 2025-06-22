@@ -56,7 +56,7 @@ public class GenericT implements TreeInterface {
         if (!isEmpty()) {
             postOrder(this.root, array);
         }
-        
+
         return array.iterator();
     }
 
@@ -170,6 +170,7 @@ public class GenericT implements TreeInterface {
     }
 
     public Object remove(Node node) throws EEmptyTree, EInvalidPosition, ENodeNotFound {
+        //revisar
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -209,10 +210,6 @@ public class GenericT implements TreeInterface {
 
     // auxiliares
     private int countNodes(Node node) throws EEmptyTree {
-        if (isEmpty()) {
-            throw new EEmptyTree("Árvore vazia");
-        }
-
         if (node == null)
             return 0;
 
@@ -224,10 +221,6 @@ public class GenericT implements TreeInterface {
     }
 
     private void preOrder(Node node, ArrayList<Node> array) throws EEmptyTree {
-        if (isEmpty()) {
-            throw new EEmptyTree("Árvore vazia");
-        }
-
         array.add(node);
         for (Node child : node.getChild()) {
             preOrder(child, array);
@@ -235,10 +228,6 @@ public class GenericT implements TreeInterface {
     }
 
     private void postOrder(Node node, ArrayList<Object> array) throws EEmptyTree {
-        if (isEmpty()) {
-            throw new EEmptyTree("Árvore vazia");
-        }
-
         for (Node child : node.getChild()) {
             postOrder(child, array);
         }

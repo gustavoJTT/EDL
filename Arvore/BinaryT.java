@@ -45,17 +45,15 @@ public class BinaryT implements BTreeInterface {
         if (isExternal(node)) {
             return 0;
         }
-        int maxHeight = 0;
-        for (Node child : node.getChild()) {
-            maxHeight = Math.max(maxHeight, height(child));
-        }
-        return maxHeight + 1;
+        int leftHeight = hasLeft(node) ? height(node.getLeftChild()) : -1;
+        int rightHeight = hasRight(node) ? height(node.getRightChild()) : -1;
+        return 1 + Math.max(leftHeight, rightHeight);
     }
 
     public Iterator<Object> elements() {
         ArrayList<Object> array = new ArrayList<>();
         if (!isEmpty()) {
-            postOrder(this.root, array);
+            inOrderElement(this.root, array);
         }
 
         return array.iterator();
@@ -64,7 +62,7 @@ public class BinaryT implements BTreeInterface {
     public Iterator<Node> nodes() {
         ArrayList<Node> array = new ArrayList<>();
         if (!isEmpty()) {
-            preOrder(this.root, array);
+            inOrderNode(this.root, array);
         }
 
         return array.iterator();
@@ -98,10 +96,17 @@ public class BinaryT implements BTreeInterface {
             throw new EInvalidPosition("Nó folha não tem filhos");
         }
 
-        return node.getChild().iterator();
+        ArrayList<Node> children = new ArrayList<>();
+        if (hasLeft(node)) {
+            children.add(leftChild(node));
+        }
+        if (hasRight(node)) {
+            children.add(rightChild(node));
+        }
+        return children.iterator();
     }
 
-    // Acesso arvore binária
+    // ----------------- Acesso arvore binária
     public Node leftChild(Node node) throws EEmptyTree, ENodeNotFound, ENoChild {
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
@@ -109,7 +114,7 @@ public class BinaryT implements BTreeInterface {
         if (node.getParent() == null && !isRoot(node)) {
             throw new ENodeNotFound("Nó não encontrado na árvore");
         }
-        if (hasLeft(node)) {
+        if (!hasLeft(node)) {
             throw new ENoChild("Sem filho esquerdo");
         }
 
@@ -123,7 +128,7 @@ public class BinaryT implements BTreeInterface {
         if (node.getParent() == null && !isRoot(node)) {
             throw new ENodeNotFound("Nó não encontrado na árvore");
         }
-        if (hasRight(node)) {
+        if (!hasRight(node)) {
             throw new ENoChild("Sem filho direito");
         }
 
@@ -139,7 +144,11 @@ public class BinaryT implements BTreeInterface {
         return !hasLeft(node) && !hasRight(node);
     }
 
-    public boolean isRoot(Node node) {
+    public boolean isRoot(Node node) throws EEmptyTree {
+        if (isEmpty()) {
+            throw new EEmptyTree("Árvore vazia");
+        }
+
         return node == root();
     }
 
@@ -157,7 +166,7 @@ public class BinaryT implements BTreeInterface {
         return 1 + depth(node.getParent());
     }
 
-    // Consulta arvore binária
+    // ----------------- Consulta arvore binária
     public boolean hasLeft(Node node) {
         return node.getLeftChild() != null;
     }
@@ -192,19 +201,46 @@ public class BinaryT implements BTreeInterface {
 
     // Adicionais
     public void addChild(Node node, Object newObject) throws EEmptyTree, ENodeNotFound {
+        // Não usado na binária
+        return;
+    }
+
+    public void addLeft(Node node, Object element) throws EEmptyTree, ENodeNotFound {
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
         if (node.getParent() == null && !isRoot(node)) {
             throw new ENodeNotFound("Nó não encontrado na árvore");
         }
+        if (hasLeft(node)) {
+            throw new EInvalidPosition("Já existe filho à esquerda");
+        }
 
-        Node newNode = new Node(newObject);
-        node.addChild(newNode);
+        Node newNode = new Node(element);
+        newNode.setParent(node);
+        node.setLeftChild(newNode);
+        this.size++;
+    }
+
+    public void addRight(Node node, Object element) throws EEmptyTree, ENodeNotFound {
+        if (isEmpty()) {
+            throw new EEmptyTree("Árvore vazia");
+        }
+        if (node.getParent() == null && !isRoot(node)) {
+            throw new ENodeNotFound("Nó não encontrado na árvore");
+        }
+        if (hasRight(node)) {
+            throw new EInvalidPosition("Já existe filho à direita");
+        }
+
+        Node newNode = new Node(element);
+        newNode.setParent(node);
+        node.setRightChild(newNode);
         this.size++;
     }
 
     public Object remove(Node node) throws EEmptyTree, EInvalidPosition, ENodeNotFound {
+        //revisar
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -224,8 +260,16 @@ public class BinaryT implements BTreeInterface {
             throw new ENodeNotFound("Nó não encontrado na árvore");
         }
 
-        parent.removeChild(node);
-        this.size -= countNodes(node);
+        if (node == parent.getLeftChild()) {
+            parent.setLeftChild(null);
+        } else if (node == parent.getRightChild()) {
+            parent.setRightChild(null);
+        } else {
+            throw new ENodeNotFound("Nó não é filho do nó pai indicado");
+        }
+
+        int nodeCount = countNodes(node);
+        this.size -= nodeCount;
         return node.getElement();
     }
 
@@ -242,41 +286,50 @@ public class BinaryT implements BTreeInterface {
         nodeTwo.setElement(temp);
     }
 
-    // auxiliares
+    // auxiliares binarios
     private int countNodes(Node node) throws EEmptyTree {
-        if (isEmpty()) {
-            throw new EEmptyTree("Árvore vazia");
-        }
-
         if (node == null)
             return 0;
 
-        int count = 1; // Count this node
-        for (Node child : node.getChild()) {
-            count += countNodes(child);
+        int count = 1;
+        if (hasLeft(node)) {
+            count += countNodes(node.getLeftChild());
+        }
+        if (hasRight(node)) {
+            count += countNodes(node.getRightChild());
         }
         return count;
     }
 
-    private void preOrder(Node node, ArrayList<Node> array) throws EEmptyTree {
-        if (isEmpty()) {
-            throw new EEmptyTree("Árvore vazia");
+    private void inOrderElement(Node node, ArrayList<Object> array) throws EEmptyTree, ENodeNotFound {
+        if (node == null) {
+            return;
         }
 
-        array.add(node);
-        for (Node child : node.getChild()) {
-            preOrder(child, array);
+        if (hasLeft(node)) {
+            inOrderElement(node.getLeftChild(), array);
+        }
+
+        array.add(node.getElement());
+
+        if (hasRight(node)) {
+            inOrderElement(node.getRightChild(), array);
         }
     }
 
-    private void postOrder(Node node, ArrayList<Object> array) throws EEmptyTree {
-        if (isEmpty()) {
-            throw new EEmptyTree("Árvore vazia");
+    private void inOrderNode(Node node, ArrayList<Node> array) throws EEmptyTree, ENodeNotFound {
+        if (node == null) {
+            return;
         }
 
-        for (Node child : node.getChild()) {
-            postOrder(child, array);
+        if (hasLeft(node)) {
+            inOrderNode(node.getLeftChild(), array);
         }
-        array.add(node.getElement());
+
+        array.add(node);
+
+        if (hasRight(node)) {
+            inOrderNode(node.getRightChild(), array);
+        }
     }
 }
