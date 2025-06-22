@@ -1,25 +1,26 @@
 import Node.Node;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import Excesao.EEmptyTree;
 import Excesao.ENoEmptyTree;
 import Excesao.EInvalidPosition;
 import Excesao.ENodeNotFound;
+import Excesao.ENoChild;
 
-public class GenericT implements TreeInterface {
+import java.util.ArrayList;
+import java.util.Iterator;
+
+public class BinaryT implements BTreeInterface {
     private Node root;
     private int size;
 
     // vazia
-    public GenericT() {
+    public BinaryT() {
         this.root = null;
         this.size = 0;
     }
 
     // com o passado
-    public GenericT(Object rootObject) {
+    public BinaryT(Object rootObject) {
         this.root = new Node(rootObject);
         this.size = 1;
     }
@@ -56,7 +57,7 @@ public class GenericT implements TreeInterface {
         if (!isEmpty()) {
             postOrder(this.root, array);
         }
-        
+
         return array.iterator();
     }
 
@@ -100,20 +101,45 @@ public class GenericT implements TreeInterface {
         return node.getChild().iterator();
     }
 
-    // Consulta
-    public boolean isInternal(Node node) {
-        return node.getChild().size() > 0;
-    }
-
-    public boolean isExternal(Node node) {
-        return node.getChild().size() == 0;
-    }
-
-    public boolean isRoot(Node node) throws EEmptyTree {
+    // Acesso arvore binária
+    public Node leftChild(Node node) throws EEmptyTree, ENodeNotFound, ENoChild {
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
+        if (node.getParent() == null && !isRoot(node)) {
+            throw new ENodeNotFound("Nó não encontrado na árvore");
+        }
+        if (hasLeft(node)) {
+            throw new ENoChild("Sem filho esquerdo");
+        }
 
+        return node.getLeftChild();
+    }
+
+    public Node rightChild(Node node) throws EEmptyTree, ENodeNotFound, ENoChild {
+        if (isEmpty()) {
+            throw new EEmptyTree("Árvore vazia");
+        }
+        if (node.getParent() == null && !isRoot(node)) {
+            throw new ENodeNotFound("Nó não encontrado na árvore");
+        }
+        if (hasRight(node)) {
+            throw new ENoChild("Sem filho direito");
+        }
+
+        return node.getRightChild();
+    }
+
+    // Consulta
+    public boolean isInternal(Node node) {
+        return hasLeft(node) || hasRight(node);
+    }
+
+    public boolean isExternal(Node node) {
+        return !hasLeft(node) && !hasRight(node);
+    }
+
+    public boolean isRoot(Node node) {
         return node == root();
     }
 
@@ -129,6 +155,15 @@ public class GenericT implements TreeInterface {
             return 0;
         }
         return 1 + depth(node.getParent());
+    }
+
+    // Consulta arvore binária
+    public boolean hasLeft(Node node) {
+        return node.getLeftChild() != null;
+    }
+
+    public boolean hasRight(Node node) {
+        return node.getRightChild() != null;
     }
 
     // Atualizacao

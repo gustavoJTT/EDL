@@ -53,7 +53,7 @@ public class Node {
     }
 
     public void addChild(Node child) {
-        // child.setParent(this.parent);
+        child.setParent(this); // Define o nó atual como pai do filho
         children.add(child);
     }
 
@@ -74,7 +74,7 @@ public class Node {
         leftChild = node;
     }
 
-    public Node getrightChild() {
+    public Node getRightChild() {
         return rightChild;
     }
 
