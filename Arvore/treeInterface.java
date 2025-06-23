@@ -1,10 +1,6 @@
-import Node.Node;
-
-import Excesao.EEmptyTree;
-import Excesao.EInvalidPosition;
-import Excesao.ENodeNotFound;
-
 import java.util.Iterator;
+import Node.Node;
+import Excesao.*;
 
 public interface TreeInterface {
     //genericos

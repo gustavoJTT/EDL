@@ -1,12 +1,7 @@
-import Node.Node;
-
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import Excesao.EEmptyTree;
-import Excesao.ENoEmptyTree;
-import Excesao.EInvalidPosition;
-import Excesao.ENodeNotFound;
+import Node.Node;
+import Excesao.*;
 
 public class GenericT implements TreeInterface {
     private Node root;
@@ -170,7 +165,6 @@ public class GenericT implements TreeInterface {
     }
 
     public Object remove(Node node) throws EEmptyTree, EInvalidPosition, ENodeNotFound {
-        //revisar
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -186,12 +180,12 @@ public class GenericT implements TreeInterface {
         }
 
         Node parent = node.getParent();
-        if (parent == null) {
-            throw new ENodeNotFound("Nó não encontrado na árvore");
+        if (isExternal(node)) {
+            parent.removeChild(node);
+        } else {
+            throw new EInvalidPosition("Um nó pai não pode ser removido");
         }
-
-        parent.removeChild(node);
-        this.size -= countNodes(node);
+        this.size -= 1;
         return node.getElement();
     }
 
@@ -209,17 +203,6 @@ public class GenericT implements TreeInterface {
     }
 
     // auxiliares
-    private int countNodes(Node node) throws EEmptyTree {
-        if (node == null)
-            return 0;
-
-        int count = 1; // Count this node
-        for (Node child : node.getChild()) {
-            count += countNodes(child);
-        }
-        return count;
-    }
-
     private void preOrder(Node node, ArrayList<Node> array) throws EEmptyTree {
         array.add(node);
         for (Node child : node.getChild()) {
