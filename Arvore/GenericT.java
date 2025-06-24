@@ -7,13 +7,6 @@ public class GenericT implements TreeInterface {
     private Node root;
     private int size;
 
-    // vazia
-    public GenericT() {
-        this.root = null;
-        this.size = 0;
-    }
-
-    // com o passado
     public GenericT(Object rootObject) {
         this.root = new Node(rootObject);
         this.size = 1;
@@ -215,5 +208,25 @@ public class GenericT implements TreeInterface {
             postOrder(child, array);
         }
         array.add(node.getElement());
+    }
+
+    // Método para imprimir a árvore em formato visual
+    public void printTree() {
+        if (isEmpty()) {
+            System.out.println("Árvore vazia!");
+            return;
+        }
+        System.out.println("\nEstrutura da Árvore:");
+        printNode(root, "", true);
+        System.out.println();
+    } // Método auxiliar para imprimir os nós com indentação
+
+    private void printNode(Node node, String prefix, boolean isLast) {
+        System.out.println(prefix + (isLast ? "└── " : "├── ") + node.getElement());
+
+        java.util.List<Node> children = node.getChild();
+        for (int i = 0; i < children.size(); i++) {
+            printNode(children.get(i), prefix + (isLast ? "    " : "│   "), i == children.size() - 1);
+        }
     }
 }

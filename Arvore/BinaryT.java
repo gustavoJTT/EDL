@@ -239,38 +239,58 @@ public class BinaryT implements BTreeInterface {
         this.size++;
     }
 
-    public Object remove(Node node) throws EEmptyTree, EInvalidPosition, ENodeNotFound {
-        //revisar
+    public Object remove(Node node) throws EEmptyTree, ENodeNotFound {
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
-        if (isRoot(node)) {
-            if (this.size == 1) {
-                Object element = this.root.getElement();
-                this.root = null;
-                this.size = 0;
-                return element;
-            } else {
-                throw new EInvalidPosition("Não é possível remover a raiz com filhos");
-            }
-        }
-
-        Node parent = node.getParent();
-        if (parent == null) {
+        if (node.getParent() == null && !isRoot(node)) {
             throw new ENodeNotFound("Nó não encontrado na árvore");
         }
 
-        if (node == parent.getLeftChild()) {
-            parent.setLeftChild(null);
-        } else if (node == parent.getRightChild()) {
-            parent.setRightChild(null);
-        } else {
-            throw new ENodeNotFound("Nó não é filho do nó pai indicado");
+        Object removedElement = node.getElement();
+
+        // Caso 1: Nó folha (sem filhos)
+        if (isExternal(node)) {
+            if (isRoot(node)) {
+                this.root = null;
+                this.size = 0;
+            } else {
+                Node parent = node.getParent();
+                if (node == parent.getLeftChild()) {
+                    parent.setLeftChild(null);
+                } else {
+                    parent.setRightChild(null);
+                }
+                this.size--;
+            }
+        }
+        // Caso 2: Nó com apenas um filho
+        else if (hasLeft(node) && !hasRight(node)) {
+            Node child = node.getLeftChild();
+            replaceNode(node, child);
+        } else if (!hasLeft(node) && hasRight(node)) {
+            Node child = node.getRightChild();
+            replaceNode(node, child);
+        }
+        // Caso 3: Nó com dois filhos
+        else {
+            // Encontra o sucessor in-order (menor nó da subárvore direita)
+            Node successor = findMinNode(node.getRightChild());
+
+            // Guarda o elemento do sucessor
+            Object successorElement = successor.getElement();
+
+            // Remove o sucessor da árvore (será um nó folha ou com no máximo um filho)
+            remove(successor);
+
+            // Substitui o elemento do nó a ser removido pelo elemento do sucessor
+            node.setElement(successorElement);
+
+            // Não decrementa size aqui porque o remove do sucessor já fez isso
+            return removedElement;
         }
 
-        int nodeCount = countNodes(node);
-        this.size -= nodeCount;
-        return node.getElement();
+        return removedElement;
     }
 
     public void swapElements(Node nodeOne, Node nodeTwo) throws EEmptyTree, ENodeNotFound {
@@ -287,18 +307,39 @@ public class BinaryT implements BTreeInterface {
     }
 
     // auxiliares binarios
-    private int countNodes(Node node) throws EEmptyTree {
-        if (node == null)
-            return 0;
+    // ----------------------Encontra o nó com o menor valor na subárvore
+    private Node findMinNode(Node node) {
+        Node current = node;
+        // Continua indo para a esquerda até encontrar o nó mais à esquerda
+        while (hasLeft(current)) {
+            current = current.getLeftChild();
+        }
+        return current;
+    }
 
-        int count = 1;
-        if (hasLeft(node)) {
-            count += countNodes(node.getLeftChild());
+    // ----------------------Substitui um nó por seu filho na árvore
+    private void replaceNode(Node node, Node child) throws EEmptyTree {
+        child.setParent(node.getParent());
+
+        if (isRoot(node)) {
+            // Se o nó a ser removido é a raiz
+            this.root = child;
+        } else {
+            // Se é filho esquerdo ou direito do pai
+            Node parent = node.getParent();
+            if (node == parent.getLeftChild()) {
+                parent.setLeftChild(child);
+            } else {
+                parent.setRightChild(child);
+            }
         }
-        if (hasRight(node)) {
-            count += countNodes(node.getRightChild());
-        }
-        return count;
+
+        // Limpa as referências do nó removido
+        node.setLeftChild(null);
+        node.setRightChild(null);
+        node.setParent(null);
+
+        this.size--;
     }
 
     private void inOrderElement(Node node, ArrayList<Object> array) throws EEmptyTree, ENodeNotFound {
@@ -330,6 +371,39 @@ public class BinaryT implements BTreeInterface {
 
         if (hasRight(node)) {
             inOrderNode(node.getRightChild(), array);
+        }
+    }
+
+    // Método para imprimir a árvore em formato visual
+    public void printTree() {
+        if (isEmpty()) {
+            System.out.println("Árvore vazia!");
+            return;
+        }
+        System.out.println("\nEstrutura da Árvore:");
+        printNode(root, "", true);
+        System.out.println();
+    }
+
+    // Método auxiliar para imprimir os nós com indentação
+    private void printNode(Node node, String prefix, boolean isLast) {
+        if (node == null)
+            return;
+
+        System.out.println(prefix + (isLast ? "└── " : "├── ") + node.getElement());
+
+        if (hasLeft(node) || hasRight(node)) {
+            if (hasLeft(node)) {
+                printNode(node.getLeftChild(), prefix + (isLast ? "    " : "│   "), !hasRight(node));
+            } else {
+                System.out.println(prefix + (isLast ? "    " : "│   ") + "├── (vazio)");
+            }
+
+            if (hasRight(node)) {
+                printNode(node.getRightChild(), prefix + (isLast ? "    " : "│   "), true);
+            } else {
+                System.out.println(prefix + (isLast ? "    " : "│   ") + "└── (vazio)");
+            }
         }
     }
 }
