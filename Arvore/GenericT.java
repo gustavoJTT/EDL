@@ -89,11 +89,19 @@ public class GenericT implements TreeInterface {
     }
 
     // Consulta
-    public boolean isInternal(Node node) {
+    public boolean isInternal(Node node) throws ENodeNotFound {
+        if (node.getParent() == null && !isRoot(node)) {
+            throw new ENodeNotFound("Nó não encontrado na árvore");
+        }
+
         return node.getChild().size() > 0;
     }
 
-    public boolean isExternal(Node node) {
+    public boolean isExternal(Node node) throws ENodeNotFound {
+        if (node.getParent() == null && !isRoot(node)) {
+            throw new ENodeNotFound("Nó não encontrado na árvore");
+        }
+
         return node.getChild().size() == 0;
     }
 
@@ -102,7 +110,7 @@ public class GenericT implements TreeInterface {
             throw new EEmptyTree("Árvore vazia");
         }
 
-        return node == root();
+        return node == this.root;
     }
 
     public int depth(Node node) throws EEmptyTree, ENodeNotFound {
@@ -152,8 +160,8 @@ public class GenericT implements TreeInterface {
             throw new ENodeNotFound("Nó não encontrado na árvore");
         }
 
-        Node newNode = new Node(newObject);
-        node.addChild(newNode);
+        Node newChild = new Node(newObject);
+        node.addChild(newChild);
         this.size++;
     }
 

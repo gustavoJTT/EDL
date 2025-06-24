@@ -13,13 +13,6 @@ public class BinaryT implements BTreeInterface {
     private Node root;
     private int size;
 
-    // vazia
-    public BinaryT() {
-        this.root = null;
-        this.size = 0;
-    }
-
-    // com o passado
     public BinaryT(Object rootObject) {
         this.root = new Node(rootObject);
         this.size = 1;
@@ -98,10 +91,10 @@ public class BinaryT implements BTreeInterface {
 
         ArrayList<Node> children = new ArrayList<>();
         if (hasLeft(node)) {
-            children.add(leftChild(node));
+            children.add(node.getLeftChild());
         }
         if (hasRight(node)) {
-            children.add(rightChild(node));
+            children.add(node.getRightChild());
         }
         return children.iterator();
     }
@@ -149,7 +142,7 @@ public class BinaryT implements BTreeInterface {
             throw new EEmptyTree("Árvore vazia");
         }
 
-        return node == root();
+        return node == this.root;
     }
 
     public int depth(Node node) throws EEmptyTree, ENodeNotFound {
@@ -205,7 +198,7 @@ public class BinaryT implements BTreeInterface {
         return;
     }
 
-    public void addLeft(Node node, Object element) throws EEmptyTree, ENodeNotFound {
+    public void addLeft(Node node, Object newObject) throws EEmptyTree, ENodeNotFound {
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -216,13 +209,13 @@ public class BinaryT implements BTreeInterface {
             throw new EInvalidPosition("Já existe filho à esquerda");
         }
 
-        Node newNode = new Node(element);
-        newNode.setParent(node);
-        node.setLeftChild(newNode);
+        Node newChild = new Node(newObject);
+        newChild.setParent(node);
+        node.setLeftChild(newChild);
         this.size++;
     }
 
-    public void addRight(Node node, Object element) throws EEmptyTree, ENodeNotFound {
+    public void addRight(Node node, Object newObject) throws EEmptyTree, ENodeNotFound {
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -233,9 +226,9 @@ public class BinaryT implements BTreeInterface {
             throw new EInvalidPosition("Já existe filho à direita");
         }
 
-        Node newNode = new Node(element);
-        newNode.setParent(node);
-        node.setRightChild(newNode);
+        Node newChild = new Node(newObject);
+        newChild.setParent(node);
+        node.setRightChild(newChild);
         this.size++;
     }
 
