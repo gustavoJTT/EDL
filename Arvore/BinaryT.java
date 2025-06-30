@@ -1,13 +1,7 @@
-import Node.Node;
-
-import Excesao.EEmptyTree;
-import Excesao.ENoEmptyTree;
-import Excesao.EInvalidPosition;
-import Excesao.ENodeNotFound;
-import Excesao.ENoChild;
-
 import java.util.ArrayList;
 import java.util.Iterator;
+import Node.Node;
+import Excesao.*;
 
 public class BinaryT implements BTreeInterface {
     private Node root;
