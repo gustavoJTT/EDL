@@ -2,13 +2,13 @@ import java.util.Iterator;
 import Node.Node;
 import Excesao.*;
 
-public interface TreeInterface {
+public interface GenericTInterface {
     //genericos
     public boolean isEmpty();
     public int size();
     public int height(Node node) throws EEmptyTree, ENodeNotFound;
-    public Iterator<Object> elements();
-    public Iterator<Node> nodes();
+    public Iterator<Object> elements() throws EEmptyTree;
+    public Iterator<Node> nodes() throws EEmptyTree;
 
     //acesso
     public Node root() throws EEmptyTree;

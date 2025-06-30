@@ -4,7 +4,7 @@ import Excesao.ENodeNotFound;
 import Excesao.EEmptyTree;
 import Excesao.ENoChild;
 
-public interface BTreeInterface extends TreeInterface {
+public interface BTreeInterface extends GenericTInterface {
     public boolean hasLeft(Node node);
     public Node leftChild(Node node) throws EEmptyTree, ENodeNotFound, ENoChild;
 

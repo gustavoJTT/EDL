@@ -3,7 +3,7 @@ import java.util.Iterator;
 import Node.Node;
 import Excesao.*;
 
-public class GenericT implements TreeInterface {
+public class GenericT implements GenericTInterface {
     private Node root;
     private int size;
 
@@ -39,21 +39,23 @@ public class GenericT implements TreeInterface {
         return maxHeight + 1;
     }
 
-    public Iterator<Object> elements() {
-        ArrayList<Object> array = new ArrayList<>();
-        if (!isEmpty()) {
-            postOrder(this.root, array);
+    public Iterator<Object> elements() throws EEmptyTree {
+        if (isEmpty()) {
+            throw new EEmptyTree("Árvore vazia");
         }
 
+        ArrayList<Object> array = new ArrayList<>();
+        preOrder(this.root, array);
         return array.iterator();
     }
 
-    public Iterator<Node> nodes() {
-        ArrayList<Node> array = new ArrayList<>();
-        if (!isEmpty()) {
-            preOrder(this.root, array);
+    public Iterator<Node> nodes() throws EEmptyTree {
+        if (isEmpty()) {
+            throw new EEmptyTree("Árvore vazia");
         }
 
+        ArrayList<Node> array = new ArrayList<>();
+        postOrder(this.root, array);
         return array.iterator();
     }
 
@@ -204,18 +206,36 @@ public class GenericT implements TreeInterface {
     }
 
     // auxiliares
-    private void preOrder(Node node, ArrayList<Node> array) throws EEmptyTree {
-        array.add(node);
+    private void preOrder(Node node, ArrayList<Object> array) throws EEmptyTree {
+        /*
+        - percorre os nós da arvore
+        - o node é visitado ANTES de seus descendentes
+        -Útil para copiar/clonar árvores, criar estruturas hierárquicas, ou quando se precisa processar um nó antes de seus descendentes
+
+        - Retorna uma lista de Node (só os primeiros)
+        */
+
+        Object element = node.getElement();
+        array.add(element);
         for (Node child : node.getChild()) {
             preOrder(child, array);
         }
+
     }
 
-    private void postOrder(Node node, ArrayList<Object> array) throws EEmptyTree {
+    private void postOrder(Node node, ArrayList<Node> array) throws EEmptyTree {
+        /*
+         - percorre os nós da arvore
+         - o node é visitado DEPOIS de seus descendentes
+         - Útil para calcular tamanhos, liberar memória, deletar nós, ou quando se precisa processar os filhos antes do pai
+
+         - Retorna uma lista de Object (elementos dos Node)
+        */
+
         for (Node child : node.getChild()) {
             postOrder(child, array);
         }
-        array.add(node.getElement());
+        array.add(node);
     }
 
     // Método para imprimir a árvore em formato visual

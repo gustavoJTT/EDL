@@ -38,9 +38,14 @@ public class BinaryT implements BTreeInterface {
         if (isExternal(node)) {
             return 0;
         }
-        int leftHeight = hasLeft(node) ? height(node.getLeftChild()) : -1;
-        int rightHeight = hasRight(node) ? height(node.getRightChild()) : -1;
-        return 1 + Math.max(leftHeight, rightHeight);
+        int maxHeight = 0;
+        if (hasLeft(node)) {
+            maxHeight = Math.max(maxHeight, height(node.getLeftChild()));
+        }
+        if (hasRight(node)) {
+            maxHeight = Math.max(maxHeight, height(node.getRightChild()));
+        }
+        return 1 + maxHeight;
     }
 
     public Iterator<Object> elements() {
