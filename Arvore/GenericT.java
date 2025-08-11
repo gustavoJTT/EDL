@@ -14,14 +14,17 @@ public class GenericT implements GenericTInterface {
 
     // Genericos
     public int size() {
+        // retorna o tamanho normal
         return this.size;
     }
 
     public boolean isEmpty() {
+        // usa o tamanho pra ver se tem raiz ou não
         return size() == 0;
     }
 
     public int height(Node node) throws EEmptyTree, ENodeNotFound {
+        // Mede a distância do nó até a folha mais distante abaixo dele (quantos níveis para baixo).
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -29,38 +32,43 @@ public class GenericT implements GenericTInterface {
             throw new ENodeNotFound("Nó não encontrado na árvore");
         }
 
+        // se o nó for externo(uma folha) ele n tem altura pq ele já está no final
         if (isExternal(node)) {
             return 0;
         }
+        // se ele n for externo percorremos os filhos e calculamos sua altura
         int maxHeight = 0;
-        for (Node child : node.getChild()) {
-            maxHeight = Math.max(maxHeight, height(child));
+        for (Node child : node.getChild()) { //igual o for in de python
+            maxHeight = Math.max(maxHeight, height(child)); // recursividade vai até node.getChild não achar mais filhos
         }
         return maxHeight + 1;
     }
 
     public Iterator<Object> elements() throws EEmptyTree {
+        // retorna a quantidade de elementos de uma arvore
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
 
         ArrayList<Object> array = new ArrayList<>();
-        preOrder(this.root, array);
+        preOrder(this.root, array); // pode usar pre ou postOrder
         return array.iterator();
     }
 
     public Iterator<Node> nodes() throws EEmptyTree {
+        // retorna a quantidade de nós
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
 
         ArrayList<Node> array = new ArrayList<>();
-        postOrder(this.root, array);
+        postOrder(this.root, array); // pode usar pre ou postOrder
         return array.iterator();
     }
 
     // Acesso
     public Node root() throws EEmptyTree {
+        // retorna a raiz
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -69,9 +77,11 @@ public class GenericT implements GenericTInterface {
     }
 
     public Node parent(Node node) throws ENodeNotFound, EInvalidPosition {
+        // retorna o parente(pai) de um node
         if (node.getParent() == null && !isRoot(node)) {
             throw new ENodeNotFound("Nó não encontrado na árvore");
         }
+        // se for raiz não tem pai
         if (isRoot(node)) {
             throw new EInvalidPosition("Raiz não tem nó pai");
         }
@@ -80,6 +90,7 @@ public class GenericT implements GenericTInterface {
     }
 
     public Iterator<Node> children(Node node) throws EEmptyTree, EInvalidPosition {
+        // retorna os filhos de um node, esse é um iterator pq n tem restrição da quantidade de filhos
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -92,6 +103,7 @@ public class GenericT implements GenericTInterface {
 
     // Consulta
     public boolean isInternal(Node node) throws ENodeNotFound {
+        // verifica se o nó é interno, se ele tem filhos
         if (node.getParent() == null && !isRoot(node)) {
             throw new ENodeNotFound("Nó não encontrado na árvore");
         }
@@ -100,6 +112,7 @@ public class GenericT implements GenericTInterface {
     }
 
     public boolean isExternal(Node node) throws ENodeNotFound {
+        // verifica se o nó é externo(folha), se ele não tem filhos
         if (node.getParent() == null && !isRoot(node)) {
             throw new ENodeNotFound("Nó não encontrado na árvore");
         }
@@ -108,6 +121,7 @@ public class GenericT implements GenericTInterface {
     }
 
     public boolean isRoot(Node node) throws EEmptyTree {
+        // verifica se é raiz
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -116,6 +130,7 @@ public class GenericT implements GenericTInterface {
     }
 
     public int depth(Node node) throws EEmptyTree, ENodeNotFound {
+        // Mede a distância do nó até a raiz (quantos níveis para cima)
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -131,6 +146,7 @@ public class GenericT implements GenericTInterface {
 
     // Atualizacao
     public Object replace(Node node, Object newObject) throws ENodeNotFound {
+        // troca o valor de um node
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -143,18 +159,9 @@ public class GenericT implements GenericTInterface {
         return oldElement;
     }
 
-    public Node addRoot(Object object) throws ENoEmptyTree {
-        if (!isEmpty()) {
-            throw new ENoEmptyTree("A árvore já tem raiz");
-        }
-
-        this.size = 1;
-        this.root = new Node(object);
-        return this.root;
-    }
-
     // Adicionais
     public void addChild(Node node, Object newObject) throws EEmptyTree, ENodeNotFound {
+        // adiciona mais um filho a um node, não importa esquerda ou direita pq é uma arvore genérica
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -168,6 +175,7 @@ public class GenericT implements GenericTInterface {
     }
 
     public Object remove(Node node) throws EEmptyTree, EInvalidPosition, ENodeNotFound {
+        // nessa implementação remove apenas nós folhas e a raiz sem filhos
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -193,6 +201,7 @@ public class GenericT implements GenericTInterface {
     }
 
     public void swapElements(Node nodeOne, Node nodeTwo) throws EEmptyTree, ENodeNotFound {
+        // troca a posição de dois nós
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }

@@ -22,6 +22,7 @@ public class BinaryT implements BTreeInterface {
     }
 
     public int height(Node node) throws EEmptyTree, ENodeNotFound {
+        // retorna a altura da arvore mas de maneira diferente da generica
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -34,17 +35,22 @@ public class BinaryT implements BTreeInterface {
         }
         int maxHeight = 0;
         if (hasLeft(node)) {
+            // precorre todos os nós a direita do nó de referencia
             maxHeight = Math.max(maxHeight, height(node.getLeftChild()));
         }
         if (hasRight(node)) {
+            // percorre todos os nós a esquerda do nó de referencia
             maxHeight = Math.max(maxHeight, height(node.getRightChild()));
         }
+        // depois de pegar todos os nós a esquerda e direita pega o que teve mais e adiciona mais 1(nó passado na função)
         return 1 + maxHeight;
     }
 
     public Iterator<Object> elements() {
+        // retorna a lista de elementos dos nós de uma arvore
         ArrayList<Object> array = new ArrayList<>();
         if (!isEmpty()) {
+            // enquanto não está vazio chama a
             inOrderElement(this.root, array);
         }
 
@@ -52,6 +58,7 @@ public class BinaryT implements BTreeInterface {
     }
 
     public Iterator<Node> nodes() {
+        // retorna uma coleção de nós de uma arvore
         ArrayList<Node> array = new ArrayList<>();
         if (!isEmpty()) {
             inOrderNode(this.root, array);
@@ -81,6 +88,7 @@ public class BinaryT implements BTreeInterface {
     }
 
     public Iterator<Node> children(Node node) throws EEmptyTree, EInvalidPosition {
+        // retorna o ula lista de filhos de um node
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -100,6 +108,7 @@ public class BinaryT implements BTreeInterface {
 
     // ----------------- Acesso arvore binária
     public Node leftChild(Node node) throws EEmptyTree, ENodeNotFound, ENoChild {
+        // retorna o filho esquerdo de um node
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -114,6 +123,7 @@ public class BinaryT implements BTreeInterface {
     }
 
     public Node rightChild(Node node) throws EEmptyTree, ENodeNotFound, ENoChild {
+        // retorna o filho direito de um node
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -129,14 +139,17 @@ public class BinaryT implements BTreeInterface {
 
     // Consulta
     public boolean isInternal(Node node) {
+        // verifica se tem algum filho, se tiver ele é interno
         return hasLeft(node) || hasRight(node);
     }
 
     public boolean isExternal(Node node) {
+        // verifica se tem algum filho, se n tiver ele é externo
         return !hasLeft(node) && !hasRight(node);
     }
 
     public boolean isRoot(Node node) throws EEmptyTree {
+        // verifica se o node é uma raiz
         if (isEmpty()) {
             throw new EEmptyTree("Árvore vazia");
         }
@@ -160,10 +173,12 @@ public class BinaryT implements BTreeInterface {
 
     // ----------------- Consulta arvore binária
     public boolean hasLeft(Node node) {
+        // verifica se o node tem filho esquerdo
         return node.getLeftChild() != null;
     }
 
     public boolean hasRight(Node node) {
+        // verifica se o node tem filho esquerdo
         return node.getRightChild() != null;
     }
 
@@ -335,8 +350,16 @@ public class BinaryT implements BTreeInterface {
     }
 
     private void inOrderElement(Node node, ArrayList<Object> array) throws EEmptyTree, ENodeNotFound {
+        /*
+        faz um percurso em ordem (in-order traversal) na árvore binária, começando pelo nó passado como parâmetro. Ele visita:
+        - Primeiro o filho esquerdo (recursivamente),
+        - Depois o próprio nó,
+        - Depois o filho direito (recursivamente).
+
+        Durante esse percurso, ele adiciona o elemento de cada nó visitado em um ArrayList<Object> array
+        */
         if (node == null) {
-            return;
+            throw new ENodeNotFound("Nó não encontrado na arvore");
         }
 
         if (hasLeft(node)) {
@@ -351,6 +374,14 @@ public class BinaryT implements BTreeInterface {
     }
 
     private void inOrderNode(Node node, ArrayList<Node> array) throws EEmptyTree, ENodeNotFound {
+        /*
+        faz um percurso em ordem (in-order traversal) na árvore binária, começando pelo nó passado como parâmetro. Ele visita:
+        - Ele visita recursivamente o filho esquerdo,
+        - Depois adiciona o próprio nó ao array,
+        - Depois visita recursivamente o filho direito.
+
+        No final, o array contém todos os nós da árvore na ordem in-order (esquerda, raiz, direita).
+        */
         if (node == null) {
             return;
         }

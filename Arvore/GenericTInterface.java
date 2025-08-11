@@ -4,8 +4,7 @@ import Excesao.*;
 
 public interface GenericTInterface {
     //genericos
-    public boolean isEmpty();
-    public int size();
+    public boolean isEmpty(); public int size();
     public int height(Node node) throws EEmptyTree, ENodeNotFound;
     public Iterator<Object> elements() throws EEmptyTree;
     public Iterator<Node> nodes() throws EEmptyTree;

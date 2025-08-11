@@ -1,169 +1,133 @@
 import Node.Node;
 import Excesao.*;
 
-public class BinaryST extends BinaryT {
-    public BinaryST(Object object) {
-        super(object);
+public class BinaryST {
+    private Node root;
+    private int size;
+
+    public BinaryST() {
+        this.size = 0;
+        this.root = null;
     }
 
-    // Busca um elemento na árvore binária de pesquisa
-    public Node search(Object element, Node node) throws EEmptyTree, ENodeNotFound {
-        if (isEmpty()) {
-            throw new EEmptyTree("Árvore vazia");
-        }
-
-        int comparison = compare(node.getElement(), element);
-
-        if (comparison < 0) {
-            if (hasRight(node)) {
-                return search(element, rightChild(node));
+    // Busca recursiva a partir de um nó
+    private Node treeSearch(Node n, int o) {
+        if (n == null)
+            return null;
+        int chave = key(n);
+        if (o == chave) {
+            return n;
+        } else if (o < chave) {
+            if (n.getLeftChild() != null) {
+                return treeSearch(n.getLeftChild(), o);
             }
-        } else if (comparison == 0) {
-            return node;
         } else {
-            if (hasLeft(node)) {
-                return search(element, leftChild(node));
+            if (n.getRightChild() != null) {
+                return treeSearch(n.getRightChild(), o);
             }
         }
-
-        return node;
-    }
-
-    // Busca um elemento a partir da raiz
-    public Node search(Object element) throws EEmptyTree {
-        if (isEmpty()) {
-            throw new EEmptyTree("Árvore vazia");
-        }
-        return search(element, root());
+        return n;
     }
 
     // Insere um novo elemento na árvore
-    public Node insert(Object element) throws EInvalidPosition {
+    public Node insert(int o) {
         if (isEmpty()) {
-            return addRoot(element);
+            this.size = 1;
+            this.root = new Node(String.valueOf(o));
+            return this.root;
         }
-
-        Node parentNode = search(element, root());
-        if (compare(element, parentNode.getElement()) == 0) {
-            throw new EInvalidPosition("Esse elemento já existe!");
+        Node position = this.treeSearch(this.root, o);
+        int chave = key(position);
+        if (chave == o) {
+            throw new EInvalidPosition("Esse elemento já foi inserido");
         }
-
-        if (compare(parentNode.getElement(), element) < 0) {
-            addRight(parentNode, element);
-            return parentNode.getRightChild();
+        Node novo = new Node(String.valueOf(o));
+        novo.setParent(position);
+        if (o < chave) {
+            position.setLeftChild(novo);
         } else {
-            addLeft(parentNode, element);
-            return parentNode.getLeftChild();
+            position.setRightChild(novo);
         }
+        this.size++;
+        return novo;
     }
 
-    // Remove um nó da árvore
-    public Object removeBST(Node node) throws EEmptyTree, ENodeNotFound, EInvalidPosition {
+    // Remove um elemento da árvore
+    public Object remove(int o) {
         if (isEmpty()) {
-            throw new EEmptyTree("A árvore está vazia!");
+            throw new EInvalidPosition("A árvore está vazia");
         }
-
-        Object element = node.getElement();
-
-        // Caso 1: Nó com dois filhos
-        if (hasLeft(node) && hasRight(node)) {
-            Node successor = findMinPrivate(rightChild(node));
-            replace(node, successor.getElement());
-            removeBST(successor);
-            return element;
+        Node position = treeSearch(root, o);
+        if (position == null || key(position) != o) {
+            throw new EInvalidPosition("Elemento não achado");
         }
-        // Caso 2 e 3: Usa o método remove da classe pai que já trata esses casos
-        else {
-            return remove(node);
+        Node left = position.getLeftChild();
+        Node right = position.getRightChild();
+        if (left != null && right != null) {
+            Node successor = right;
+            while (successor.getLeftChild() != null) {
+                successor = successor.getLeftChild();
+            }
+            Object elem = remove(key(successor));
+            position.setElement(successor.getElement());
+            return elem;
         }
-    }
-
-    // Encontra o menor elemento (método privado auxiliar)
-    private Node findMinPrivate(Node node) {
-        if (isExternal(node)) {
-            return node;
+        Node child;
+        if (left != null) {
+            child = left;
+        } else if (right != null) {
+            child = right;
         } else {
-            if (hasLeft(node)) {
-                return findMinPrivate(leftChild(node));
+            child = null;
+        }
+        if (position == this.root) {
+            this.root = child;
+            if (child != null) {
+                child.setParent(null);
+            }
+        } else {
+            Node parent = position.getParent();
+            if (position == parent.getLeftChild()) {
+                parent.setLeftChild(child);
             } else {
-                return node;
+                parent.setRightChild(child);
+            }
+            if (child != null) {
+                child.setParent(parent);
             }
         }
+        size--;
+        return o;
     }
 
-    // Método para imprimir a árvore em ordem (elementos ordenados)
-    public void printInOrder() throws EEmptyTree {
+    // Busca um elemento a partir da raiz
+    public Node search(int o) {
         if (isEmpty()) {
-            System.out.println("Árvore vazia!");
-            return;
+            throw new EInvalidPosition("Árvore vazia");
         }
-        System.out.print("Elementos em ordem: ");
-        inOrderPrint(root());
-        System.out.println();
+        Node n = treeSearch(root, o);
+        if (n == null || key(n) != o) {
+            throw new EInvalidPosition("Elemento não achado");
+        }
+        return n;
     }
 
-    private void inOrderPrint(Node node) {
-        if (node != null) {
-            if (hasLeft(node)) {
-                inOrderPrint(leftChild(node));
-            }
-            System.out.print(node.getElement() + " ");
-            if (hasRight(node)) {
-                inOrderPrint(rightChild(node));
-            }
-        }
+    public boolean isEmpty() {
+        return size == 0;
     }
 
-    // Encontra o maior elemento (mais à direita)
-    public Node findMax() throws EEmptyTree {
-        if (isEmpty()) {
-            throw new EEmptyTree("Árvore vazia");
-        }
-        return findMax(root());
+    public Node getRoot() {
+        return root;
     }
 
-    private Node findMax(Node node) {
-        if (isExternal(node)) {
-            return node;
-        } else {
-            if (hasRight(node)) {
-                return findMax(rightChild(node));
-            } else {
-                return node;
-            }
-        }
+    public int getSize() {
+        return size;
     }
 
-    // Encontra o menor elemento (mais à esquerda)
-    public Node findMin() throws EEmptyTree {
-        if (isEmpty()) {
-            throw new EEmptyTree("Árvore vazia");
-        }
-        return findMinPrivate(root());
-    }
-
-    // Auxiliar para comparação
-    private int compare(Object objectOne, Object objectTwo) {
-        int one = convertInt(objectOne);
-        int two = convertInt(objectTwo);
-
-        return Integer.compare(one, two);
-    }
-
-    private int convertInt(Object object) {
-        if (object instanceof Integer) {
-            return (Integer) object;
-        }
-        if (object instanceof Float) {
-            return Math.round((Float) object);
-        }
-        if (object instanceof String) {
-            return Integer.parseInt((String) object);
-        }
-        if (object instanceof Boolean) {
-            return ((Boolean) object) ? 1 : 0;
-        }
-
-        return 0;
+    // Retorna a chave (int) de um nó
+    private int key(Node n) {
+        if (n == null)
+            throw new EInvalidPosition("Nó inválido");
+        return Integer.parseInt((String) n.getElement());
     }
 }
