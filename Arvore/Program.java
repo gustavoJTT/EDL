@@ -24,15 +24,15 @@ public class Program {
 
             switch (quest) {
                 case 1:
-                    new Program().quest1();
+                    new ProgramHash().quest1();
                     break;
 
                 case 2:
-                    new Program().quest2();
+                    new ProgramHash().quest2();
                     break;
 
                 case 3:
-                    new Program().quest3();
+                    new ProgramHash().quest3();
                     break;
 
                 case 0:
