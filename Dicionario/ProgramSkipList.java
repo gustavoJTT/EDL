@@ -1,40 +1,54 @@
 import java.util.Iterator;
 
 /**
- * Programa de demonstração da Skip List
- * Mostra como usar as operações básicas e visualiza a estrutura multi-nível
+ * Programa de demonstração da Skip List - VERSÃO SIMPLIFICADA
+ *
+ * A Skip List é uma estrutura de dados probabilística que mantém elementos
+ * ordenados
+ * usando múltiplos níveis de listas encadeadas para permitir busca eficiente
+ * O(log n).
+ *
+ * CONCEITOS DEMONSTRADOS:
+ * 📊 Estrutura Multi-nível: Como os elementos são organizados em diferentes
+ * níveis
+ * 🎲 Natureza Probabilística: Como decisões aleatórias determinam a altura dos
+ * nós
+ * 🔍 Busca Eficiente: Como a busca "pula" elementos usando níveis superiores
+ * ⚖️ Balanceamento Automático: Como a probabilidade mantém a estrutura
+ * balanceada
  */
 public class ProgramSkipList {
 
     public static void main(String[] args) {
-        System.out.println("=== DEMONSTRAÇÃO DA SKIP LIST ===\n");
+        System.out.println("🏗️ === DEMONSTRAÇÃO DA SKIP LIST ===\n");
 
-        // Teste básico de operações
-        System.out.println("1. TESTANDO OPERAÇÕES BÁSICAS:");
-        testarOperacoesBasicas();
-
-        System.out.println("\n" + "=".repeat(60) + "\n");
-
-        // Teste de estrutura e níveis
-        System.out.println("2. VISUALIZANDO ESTRUTURA MULTI-NÍVEL:");
-        testarEstrutura();
+        // Demonstração básica
+        System.out.println("1️⃣ OPERAÇÕES BÁSICAS:");
+        demonstrarOperacoesBasicas();
 
         System.out.println("\n" + "=".repeat(60) + "\n");
 
-        // Teste de performance
-        System.out.println("3. TESTE DE PERFORMANCE COM MUITOS ELEMENTOS:");
-        testarPerformance();
+        // Visualização da estrutura probabilística
+        System.out.println("2️⃣ ESTRUTURA PROBABILÍSTICA:");
+        demonstrarEstruturaProbabilistica();
+
+        System.out.println("\n" + "=".repeat(60) + "\n");
+
+        // Eficiência da busca
+        System.out.println("3️⃣ EFICIÊNCIA DA BUSCA:");
+        demonstrarEficienciaBusca();
     }
 
     /**
-     * Testa as operações básicas da Skip List
+     * Demonstra as operações fundamentais da Skip List
+     * Mostra inserção, busca, remoção e iteração ordenada
      */
-    public static void testarOperacoesBasicas() {
+    public static void demonstrarOperacoesBasicas() {
         skipList lista = new skipList();
 
-        System.out.println("Inserindo elementos: 10, 5, 15, 3, 7, 12, 18");
+        System.out.println("📝 Inserindo elementos: 10, 5, 15, 3, 7, 12, 18");
 
-        // Inserção de elementos
+        // Inserção: elementos são automaticamente mantidos em ordem
         lista.insertItem(10, "Dez");
         lista.insertItem(5, "Cinco");
         lista.insertItem(15, "Quinze");
@@ -43,146 +57,119 @@ public class ProgramSkipList {
         lista.insertItem(12, "Doze");
         lista.insertItem(18, "Dezoito");
 
-        System.out.println("Tamanho após inserções: " + lista.size());
-        lista.printLevels();
+        System.out.println("✅ Tamanho após inserções: " + lista.size());
+        System.out.println("\n🏗️ Estrutura multi-nível criada:");
+        lista.printSkipList();
 
-        // Busca de elementos
-        System.out.println("\nTestando busca:");
-        Item item = lista.findElement(7);
-        if (item != null) {
-            System.out.println("Encontrado: " + item.key() + " -> " + item.value());
-        }
+        // Demonstra busca eficiente
+        System.out.println("\n🔍 Testando busca:");
+        buscarElemento(lista, 7, "elemento existente");
+        buscarElemento(lista, 99, "elemento inexistente");
 
-        item = lista.findElement(99);
-        if (item == null) {
-            System.out.println("Chave 99 não encontrada (como esperado)");
-        }
-
-        // Verificação de existência
-        System.out.println("\nVerificando existência:");
-        System.out.println("Contém 12? " + lista.contains(12));
-        System.out.println("Contém 20? " + lista.contains(20));
-
-        // Iteração sobre chaves (deve estar em ordem)
-        System.out.println("\nChaves em ordem:");
-        Iterator<Integer> chaves = lista.keys();
-        while (chaves.hasNext()) {
-            System.out.print(chaves.next() + " ");
-        }
-        System.out.println();
-
-        // Remoção de elemento
-        System.out.println("\nRemovendo elemento com chave 15:");
-        Item removido = lista.removeElement(15);
-        System.out.println("Removido: " + removido.key() + " -> " + removido.value());
-        System.out.println("Tamanho após remoção: " + lista.size());
-
-        lista.printLevels();
-
-        // Teste de chave já ocupada
-        System.out.println("\nTentando inserir chave duplicada (deve gerar erro):");
+        // Demonstra remoção
+        System.out.println("\n🗑️ Removendo elemento 15:");
         try {
-            lista.insertItem(10, "Dez Duplicado");
-        } catch (IllegalArgumentException e) {
-            System.out.println("Erro capturado: " + e.getMessage());
+            Item removido = lista.removeElement(15);
+            System.out.println("Removido: " + removido.key() + " → " + removido.value());
+            System.out.println("Novo tamanho: " + lista.size());
+        } catch (Exception e) {
+            System.out.println("❌ Erro: " + e.getMessage());
         }
+
+        // Mostra que elementos permanecem ordenados
+        System.out.println("\n📋 Elementos em ordem após remoção:");
+        listarElementosOrdenados(lista);
     }
 
     /**
-     * Testa e visualiza a estrutura multi-nível da Skip List
+     * Demonstra como a probabilidade cria uma estrutura balanceada
+     * Cada elemento tem 50% de chance de aparecer no próximo nível
      */
-    public static void testarEstrutura() {
+    public static void demonstrarEstruturaProbabilistica() {
         skipList lista = new skipList();
 
-        System.out.println("Inserindo elementos sequenciais para observar a estrutura probabilística:");
+        System.out.println("🎲 A Skip List usa probabilidade para determinar níveis:");
+        System.out.println("   • Cada elemento tem 50% de chance de estar no próximo nível");
+        System.out.println("   • Isso cria uma estrutura naturalmente balanceada");
+        System.out.println("   • Não precisa de rotações como árvores balanceadas\n");
 
-        // Insere elementos e mostra como a estrutura evolui
-        int[] elementos = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        // Insere elementos sequenciais para mostrar distribuição probabilística
+        System.out.println("Inserindo elementos 1-8 e observando distribuição nos níveis:");
+
+        for (int i = 1; i <= 8; i++) {
+            lista.insertItem(i, "Valor_" + i);
+            System.out.println("\n▶️ Após inserir " + i + ":");
+            lista.printSkipList();
+        }
+
+        System.out.println("\n📊 Observe como alguns elementos aparecem em múltiplos níveis!");
+        System.out.println("💡 Elementos em níveis altos funcionam como 'expressos' para busca rápida");
+    }
+
+    /**
+     * Demonstra por que a busca é O(log n) em média
+     * Mostra como os níveis superiores aceleram a navegação
+     */
+    public static void demonstrarEficienciaBusca() {
+        skipList lista = new skipList();
+
+        // Cria uma lista maior para demonstrar eficiência
+        System.out.println("📈 Criando Skip List com 15 elementos para demonstrar eficiência:");
+
+        int[] elementos = { 50, 25, 75, 12, 37, 62, 87, 6, 18, 31, 43, 56, 68, 81, 93 };
 
         for (int elemento : elementos) {
-            lista.insertItem(elemento, "Valor " + elemento);
-            System.out.println("\nApós inserir " + elemento + ":");
-            lista.printLevels();
+            lista.insertItem(elemento, "Valor_" + elemento);
         }
 
-        // Mostra estatísticas finais
-        System.out.println("\nEstatísticas finais:");
-        lista.printStatistics();
+        System.out.println("✅ Lista criada. Estrutura final:");
+        lista.printSkipList();
 
-        // Demonstra a eficiência da busca
-        System.out.println("\nDemonstrando busca eficiente:");
-        System.out.println("Buscando elemento 8...");
-        Item resultado = lista.findElement(8);
-        if (resultado != null) {
-            System.out.println("Encontrado: " + resultado.key() + " -> " + resultado.value());
-            System.out.println("(A busca 'pulou' vários elementos usando os níveis superiores)");
-        }
+        System.out.println("\n🔍 Como a busca funciona na Skip List:");
+        System.out.println("   1. Começa no nível mais alto, à esquerda");
+        System.out.println("   2. Move para direita enquanto chave for menor que target");
+        System.out.println("   3. Quando não pode mais ir à direita, desce um nível");
+        System.out.println("   4. Repete até encontrar ou chegar ao nível 0");
 
-        // Remove alguns elementos para mostrar como a estrutura se adapta
-        System.out.println("\nRemovendo elementos 3, 5, 7:");
-        lista.removeElement(3);
-        lista.removeElement(5);
-        lista.removeElement(7);
+        // Demonstra algumas buscas
+        System.out.println("\n🎯 Testando buscas estratégicas:");
+        buscarElemento(lista, 25, "início da lista");
+        buscarElemento(lista, 75, "meio da lista");
+        buscarElemento(lista, 93, "final da lista");
+        buscarElemento(lista, 100, "elemento inexistente");
 
-        System.out.println("Estrutura após remoções:");
-        lista.printLevels();
-        lista.printStatistics();
+        System.out.println("\n⚡ VANTAGEM: Em uma lista comum, buscar o elemento 93");
+        System.out.println("   exigiria percorrer todos os elementos anteriores!");
+        System.out.println("   Na Skip List, os níveis superiores aceleram a busca!");
+
+        // Mostra todos os elementos em ordem
+        System.out.println("\n📋 Todos os elementos permanecem sempre ordenados:");
+        listarElementosOrdenados(lista);
     }
 
     /**
-     * Testa performance com muitos elementos
+     * Utilitário para buscar e reportar resultado
      */
-    public static void testarPerformance() {
-        skipList lista = new skipList();
-
-        int numElementos = 20;
-        System.out.println("Inserindo " + numElementos + " elementos aleatórios...");
-
-        long inicio = System.nanoTime();
-
-        // Insere elementos em ordem não sequencial para simular uso real
-        int[] elementos = { 50, 25, 75, 12, 37, 62, 87, 6, 18, 31,
-                43, 56, 68, 81, 93, 3, 9, 15, 21, 27 };
-
-        for (int i = 0; i < Math.min(numElementos, elementos.length); i++) {
-            lista.insertItem(elementos[i], "Elemento " + elementos[i]);
+    private static void buscarElemento(skipList lista, int chave, String descricao) {
+        System.out.println("  🔎 Buscando " + chave + " (" + descricao + "):");
+        Item item = lista.findElement(chave);
+        if (item != null) {
+            System.out.println("    ✅ Encontrado: " + item.key() + " → " + item.value());
+        } else {
+            System.out.println("    ❌ Não encontrado");
         }
+    }
 
-        long tempoInsercao = System.nanoTime() - inicio;
-
-        System.out.println("Tempo de inserção: " + tempoInsercao / 1000000.0 + " ms");
-        System.out.println("Estrutura final:");
-        lista.printLevels();
-
-        // Teste de busca
-        inicio = System.nanoTime();
-
-        System.out.println("\nTestando buscas:");
-        int[] chavesBusca = { 3, 25, 50, 75, 93, 100 }; // Inclui uma chave inexistente
-
-        for (int chave : chavesBusca) {
-            Item resultado = lista.findElement(chave);
-            if (resultado != null) {
-                System.out.println("Encontrado: " + chave);
-            } else {
-                System.out.println("Não encontrado: " + chave);
-            }
+    /**
+     * Utilitário para listar elementos em ordem
+     */
+    private static void listarElementosOrdenados(skipList lista) {
+        Iterator<Item> elementos = lista.elements();
+        System.out.print("    ");
+        while (elementos.hasNext()) {
+            Item item = elementos.next();
+            System.out.print(item.key() + " ");
         }
-
-        long tempoBusca = System.nanoTime() - inicio;
-        System.out.println("Tempo total de " + chavesBusca.length + " buscas: " +
-                tempoBusca / 1000000.0 + " ms");
-
-        // Estatísticas finais
-        System.out.println("\nEstatísticas finais:");
-        lista.printStatistics();
-
-        // Demonstra que os elementos estão em ordem
-        System.out.println("\nTodos os elementos em ordem:");
-        Iterator<Integer> chaves = lista.keys();
-        while (chaves.hasNext()) {
-            System.out.print(chaves.next() + " ");
-        }
-        System.out.println();
+        System.out.println("(sempre em ordem crescente!)");
     }
 }

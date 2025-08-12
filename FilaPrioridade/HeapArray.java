@@ -233,4 +233,71 @@ public class HeapArray implements FPInterface {
         this.heap[a] = this.heap[b];
         this.heap[b] = temp;
     }
+
+    // ========== MÉTODO PRINT ==========
+
+    /**
+     * Imprime a estrutura visual do heap em formato de árvore
+     * Mostra como os elementos estão organizados hierarquicamente
+     */
+    public void printTree() {
+        if (isEmpty()) {
+            System.out.println("Heap vazio!");
+            return;
+        }
+
+        System.out.println("\n=== HEAP ARRAY (Min-Heap) ===");
+        System.out.println("Tamanho: " + size());
+        System.out.println("Estrutura da árvore:");
+
+        printNode(1, "", true);
+
+        System.out.println("\nRepresentação do array:");
+        System.out.print("Índices: [");
+        for (int i = 1; i <= ultimo; i++) {
+            System.out.print(i + (i < ultimo ? ", " : ""));
+        }
+        System.out.println("]");
+
+        System.out.print("Chaves:  [");
+        for (int i = 1; i <= ultimo; i++) {
+            System.out.print(heap[i].key() + (i < ultimo ? ", " : ""));
+        }
+        System.out.println("]");
+        System.out.println("=========================\n");
+    }
+
+    /**
+     * Método auxiliar recursivo para impressão hierárquica
+     * 
+     * @param index  índice do nó atual no array
+     * @param prefix prefixo para formatação (indentação)
+     * @param isLast indica se é o último filho (para formatação)
+     */
+    private void printNode(int index, String prefix, boolean isLast) {
+        if (index > ultimo) {
+            return;
+        }
+
+        // Imprime o nó atual
+        System.out.println(prefix + (isLast ? "└── " : "├── ") +
+                heap[index].key() + " (" + heap[index].value() + ")");
+
+        // Calcula índices dos filhos
+        int leftChild = 2 * index;
+        int rightChild = 2 * index + 1;
+
+        // Se tem pelo menos um filho
+        if (leftChild <= ultimo) {
+            // Imprime filho esquerdo (se existe)
+            if (leftChild <= ultimo) {
+                printNode(leftChild, prefix + (isLast ? "    " : "│   "), rightChild > ultimo);
+            }
+
+            // Imprime filho direito (se existe)
+            if (rightChild <= ultimo) {
+                printNode(rightChild, prefix + (isLast ? "    " : "│   "), true);
+            }
+        }
+    }
 }

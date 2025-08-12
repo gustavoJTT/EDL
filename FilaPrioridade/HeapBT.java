@@ -41,7 +41,7 @@ public class HeapBT implements FPInterface {
 
     /**
      * Retorna o número de elementos na árvore
-     * 
+     *
      * @return quantidade de nós
      */
     @Override
@@ -51,7 +51,7 @@ public class HeapBT implements FPInterface {
 
     /**
      * Verifica se a árvore está vazia
-     * 
+     *
      * @return true se não há nós, false caso contrário
      */
     @Override
@@ -61,7 +61,7 @@ public class HeapBT implements FPInterface {
 
     /**
      * Retorna o elemento com menor chave sem removê-lo
-     * 
+     *
      * @return Item na raiz (menor chave)
      * @throws EFilaPrioridade se o heap estiver vazio
      */
@@ -75,7 +75,7 @@ public class HeapBT implements FPInterface {
 
     /**
      * Insere um novo elemento no heap
-     * 
+     *
      * @param key   prioridade do elemento
      * @param value dados a serem armazenados
      *
@@ -112,7 +112,7 @@ public class HeapBT implements FPInterface {
 
     /**
      * Remove e retorna o elemento com menor chave
-     * 
+     *
      * @return Item que estava na raiz
      * @throws EFilaPrioridade se o heap estiver vazio
      *
@@ -156,7 +156,7 @@ public class HeapBT implements FPInterface {
 
     /**
      * Encontra o pai onde deve ser inserido o próximo nó
-     * 
+     *
      * @return nó que será pai do próximo elemento inserido
      *
      *         ALGORITMO INTELIGENTE:
@@ -189,7 +189,7 @@ public class HeapBT implements FPInterface {
 
     /**
      * Encontra o último nó da árvore (mais à direita no último nível)
-     * 
+     *
      * @return o último nó inserido
      *
      *         ALGORITMO:
@@ -220,7 +220,7 @@ public class HeapBT implements FPInterface {
 
     /**
      * Restaura a propriedade do heap subindo o nó (usado após inserção)
-     * 
+     *
      * @param node nó que precisa subir
      *
      *             PROCESSO:
@@ -246,7 +246,7 @@ public class HeapBT implements FPInterface {
 
     /**
      * Restaura a propriedade do heap descendo o nó (usado após remoção)
-     * 
+     *
      * @param node nó que precisa descer
      *
      *             PROCESSO:
@@ -279,7 +279,7 @@ public class HeapBT implements FPInterface {
 
     /**
      * Compara duas chaves (retorna true se key1 < key2)
-     * 
+     *
      * @param item1 primeiro item para comparação
      * @param item2 segundo item para comparação
      * @return true se chave de item1 < chave de item2
@@ -299,20 +299,25 @@ public class HeapBT implements FPInterface {
     }
 
     /**
-     * Método auxiliar para debug - mostra a estrutura da árvore
+     * Método auxiliar para visualização - mostra a estrutura da árvore
      * Imprime a árvore de forma hierárquica e visual
      */
     public void printTree() {
         if (isEmpty()) {
-            System.out.println("Heap vazio");
+            System.out.println("Heap vazio!");
             return;
         }
+
+        System.out.println("\n=== HEAP BINARY TREE (Min-Heap) ===");
+        System.out.println("Tamanho: " + size());
+        System.out.println("Estrutura da árvore:");
         printTreeRecursive(this.root, "", true);
+        System.out.println("====================================\n");
     }
 
     /**
      * Método recursivo para imprimir árvore
-     * 
+     *
      * @param node   nó atual
      * @param prefix prefixo para formatação
      * @param isLast se é o último filho
@@ -331,40 +336,5 @@ public class HeapBT implements FPInterface {
                 }
             }
         }
-    }
-
-    /**
-     * Método para verificar se a propriedade do heap está sendo mantida
-     * 
-     * @return true se é um heap válido, false caso contrário
-     *
-     *         VALIDAÇÃO: Para cada nó, verifica se pai ≤ filhos
-     */
-    public boolean isValidHeap() {
-        return isValidHeapRecursive(this.root);
-    }
-
-    /**
-     * Método recursivo para validar heap
-     * 
-     * @param node nó atual
-     * @return true se subárvore é heap válido
-     */
-    private boolean isValidHeapRecursive(HeapNode node) {
-        if (node == null) {
-            return true;
-        }
-
-        // Verifica se o pai é menor que os filhos
-        if (node.left != null && !compare(node.data, node.left.data)) {
-            return false;
-        }
-
-        if (node.right != null && !compare(node.data, node.right.data)) {
-            return false;
-        }
-
-        // Verifica recursivamente os subheaps
-        return isValidHeapRecursive(node.left) && isValidHeapRecursive(node.right);
     }
 }

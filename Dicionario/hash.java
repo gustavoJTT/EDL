@@ -2,37 +2,38 @@ import java.util.Iterator;
 import java.util.ArrayList;
 
 /**
- * Implementação de uma Hash Table (Tabela Hash) usando endereçamento aberto
- * com tratamento de colisões por sondagem linear ou double hashing.
+ * Implementação de uma Hash Table (Tabela de Dispersão) usando endereçamento
+ * aberto
  *
- * Uma hash table é uma estrutura de dados que mapeia chaves para valores,
- * permitindo operações de inserção, busca e remoção em tempo médio O(1).
+ * CONCEITOS FUNDAMENTAIS:
+ * - Função de hash: converte chave em índice do array
+ * - Tratamento de colisões: quando duas chaves mapeiam para o mesmo índice
+ * - Endereçamento aberto: resolve colisões procurando próxima posição vazia
+ * - Fator de carga: razão elementos/capacidade (máximo 50% para eficiência)
+ *
+ * MÉTODOS DE SONDAGEM SUPORTADOS:
+ * - Linear Probing: incrementa +1 a cada tentativa
+ * - Double Hashing: usa segunda função hash para calcular passo
  */
 public class hash implements DictInterface {
 
-    // Array que armazena os itens da hash table
-    private Item[] array;
-
-    // Capacidade total da hash table (sempre um número primo para melhor
-    // distribuição)
-    private int capacidade;
-
-    // Número atual de elementos armazenados
-    private int tamanho;
-
-    // Flag que indica se deve usar double hashing (true) ou sondagem linear (false)
-    private boolean is_doubleHash;
+    private Item[] array; // Array principal da hash table
+    private int capacidade; // Tamanho atual do array (sempre primo)
+    private int tamanho; // Número de elementos válidos armazenados
+    private boolean is_doubleHash; // Flag: usar double hashing ou linear probing
 
     /**
      * Construtor da hash table
      *
-     * @param capacidade    Capacidade inicial desejada
-     * @param is_doubleHash Se true, usa double hashing; se false, usa sondagem
-     *                      linear
+     * @param capacidade    tamanho inicial desejado
+     * @param is_doubleHash true = double hashing, false = linear probing
+     *
+     *                      IMPORTANTE: Capacidade é ajustada para o próximo número
+     *                      primo
+     *                      Números primos reduzem clustering e melhoram
+     *                      distribuição
      */
     public hash(int capacidade, boolean is_doubleHash) {
-        // Garante que a capacidade seja um número primo para melhor distribuição dos
-        // hash codes
         if (this.isPrimo(capacidade)) {
             this.capacidade = capacidade;
         } else {
@@ -45,89 +46,150 @@ public class hash implements DictInterface {
     }
 
     /**
-     * Verifica se um número é primo
-     * Números primos são importantes para hash tables pois reduzem colisões
-     *
-     * @param num Número a ser verificado
-     * @return true se o número for primo, false caso contrário
-     */
-    private boolean isPrimo(int num) {
-        if (num <= 1) {
-            return false;
-        }
-
-        if (num == 2) {
-            return true;
-        }
-
-        // Números pares (exceto 2) não são primos
-        if (num % 2 == 0) {
-            return false;
-        }
-
-        // Verifica divisibilidade apenas até a raiz quadrada
-        // Se houver um divisor maior que sqrt(num), já teria sido encontrado um menor
-        for (int i = 3; i <= Math.sqrt(num); i += 2) {
-            if (num % i == 0) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    /**
-     * Encontra o próximo número primo maior que o número dado
-     *
-     * @param num Número de referência
-     * @return O próximo número primo
-     */
-    private int proximoPrimo(int num) {
-        int candidato = num + 1;
-
-        while (!isPrimo(candidato)) {
-            candidato++;
-        }
-
-        return candidato;
-    }
-
-    /**
      * Busca um elemento na hash table pela chave
-     * Usa sondagem linear ou double hashing para resolver colisões
      *
-     * @param k Chave do elemento a ser buscado
-     * @return O item encontrado ou null se não existir
+     * @param k chave a ser buscada
+     * @return Item encontrado ou null se não existir
+     *
+     *         ALGORITMO:
+     *         1. Calcula posição inicial usando função hash
+     *         2. Se posição ocupada por outra chave, aplica sondagem
+     *         3. Continua até encontrar a chave ou posição vazia
+     *         4. Ignora posições marcadas como "Available" (removidas)
      */
     public Item findElement(int k) {
         int index = this.dispersao(k);
 
-        // Continua procurando até encontrar o elemento, uma posição vazia, ou dar a
-        // volta completa
         while (this.array[index] != null && !this.array[index].value().equals("Available")) {
             if ((Integer) this.array[index].key() == k) {
-                break;
+                return this.array[index]; // Encontrou!
             }
-            // Calcula o próximo índice usando a estratégia de resolução de colisões
-            // escolhida
+            // Aplica sondagem (linear ou double hashing)
             index = (index + pulo(k, this.is_doubleHash)) % this.capacidade;
         }
 
-        return this.array[index];
+        return null; // Não encontrou
     }
 
     /**
-     * Encontra o índice onde um elemento está ou deveria estar
+     * Insere um novo item na hash table
      *
-     * @param k Chave do elemento
-     * @return Índice do elemento na tabela
+     * @param k chave do item
+     * @param o valor a ser armazenado
+     * @throws RuntimeException se chave já existir
+     *
+     *                          PROCESSO:
+     *                          1. Verifica fator de carga (se > 50%, redimensiona)
+     *                          2. Verifica se chave já existe (erro se sim)
+     *                          3. Encontra posição livre usando sondagem
+     *                          4. Insere item e incrementa contador
      */
-    public int findElementIndex(int k) {
+    public void insertItem(int k, Object o) {
+        // Mantém fator de carga ≤ 50% para eficiência
+        if (this.tamanho >= this.capacidade / 2) {
+            this.reHash();
+        }
+
+        Item novo = new Item(k, o);
+        Item posicao = this.findElement(k);
+
+        if (posicao != null) {
+            throw new RuntimeException("Chave já ocupada");
+        }
+
+        int index = this.findElementIndex(k);
+        this.array[index] = novo;
+        this.tamanho++;
+    }
+
+    /**
+     * Remove um elemento da hash table
+     *
+     * @param k chave do elemento a remover
+     * @return Item removido
+     * @throws RuntimeException se elemento não existir
+     *
+     *                          REMOÇÃO LAZY: Marca posição como "Available" em vez
+     *                          de null
+     *                          Isso evita quebrar cadeias de sondagem de outros
+     *                          elementos
+     */
+    public Item removeElement(int k) {
+        int index = this.findElementIndex(k);
+
+        if (this.array[index] == null || this.array[index].value().equals("Available")) {
+            throw new RuntimeException("Sem elemento para ser removido");
+        }
+
+        Item elemento = this.array[index];
+        this.array[index] = new Item(k, "Available"); // Remoção lazy
+
+        this.tamanho--;
+        return elemento;
+    }
+
+    /**
+     * Retorna o número de elementos válidos na hash table
+     *
+     * @return quantidade de elementos (excluindo "Available")
+     */
+    public int size() {
+        return this.tamanho;
+    }
+
+    /**
+     * Verifica se a hash table está vazia
+     *
+     * @return true se não há elementos válidos
+     */
+    public boolean isEmpty() {
+        return this.tamanho == 0;
+    }
+
+    /**
+     * Retorna um iterador para todas as chaves válidas na hash table
+     *
+     * @return Iterator<Integer> das chaves (ignora "Available")
+     */
+    public Iterator<Integer> keys() {
+        ArrayList<Integer> chaves = new ArrayList<>();
+        for (int i = 0; i < this.capacidade; i++) {
+            if (this.array[i] != null && !this.array[i].value().equals("Available")) {
+                chaves.add((Integer) this.array[i].key());
+            }
+        }
+        return chaves.iterator();
+    }
+
+    /**
+     * Retorna um iterador para todos os elementos válidos na hash table
+     *
+     * @return Iterator<Item> dos elementos (ignora "Available")
+     */
+    public Iterator<Item> elements() {
+        ArrayList<Item> elementos = new ArrayList<>();
+        for (int i = 0; i < this.capacidade; i++) {
+            if (this.array[i] != null && !this.array[i].value().equals("Available")) {
+                elementos.add(this.array[i]);
+            }
+        }
+        return elementos.iterator();
+    }
+
+    // ========== MÉTODOS AUXILIARES NECESSÁRIOS ==========
+
+    /**
+     * Encontra o índice onde um elemento deveria estar ou onde pode ser inserido
+     *
+     * @param k chave a procurar
+     * @return índice da posição (ocupada pela chave ou primeira vazia/Available)
+     */
+    private int findElementIndex(int k) {
         int index = this.dispersao(k);
 
         while (this.array[index] != null && !this.array[index].value().equals("Available")) {
             if ((Integer) this.array[index].key() == k) {
-                break;
+                break; // Encontrou a chave
             }
             index = (index + pulo(k, this.is_doubleHash)) % this.capacidade;
         }
@@ -136,42 +198,19 @@ public class hash implements DictInterface {
     }
 
     /**
-     * Insere um novo item na hash table
-     * Redimensiona a tabela se o fator de carga exceder 50%
+     * Redimensiona a hash table quando fator de carga excede 50%
      *
-     * @param k Chave do item
-     * @param o Valor do item
-     */
-    public void insertItem(int k, Object o) {
-        // Redimensiona a tabela se estiver mais de 50% cheia
-        // Isso mantém o desempenho das operações próximo de O(1)
-        if (this.tamanho >= this.capacidade / 2) {
-            this.reHash();
-        }
-
-        Item novo = new Item(k, o);
-        Item posicao = this.findElement(k);
-        int index = this.findElementIndex(k);
-
-        // Verifica se a chave já existe (não permite duplicatas)
-        if (posicao != null && !posicao.value().equals("Available")) {
-            throw new RuntimeException("Chave já ocupada");
-        }
-
-        this.array[index] = novo;
-        this.tamanho++;
-    }
-
-    /**
-     * Redimensiona a hash table quando o fator de carga fica muito alto
-     * Dobra a capacidade e recalcula as posições de todos os elementos
+     * PROCESSO:
+     * 1. Salva array atual
+     * 2. Cria novo array com dobro da capacidade (próximo primo)
+     * 3. Re-insere todos elementos válidos (recalcula posições)
+     * 4. Elimina fragmentação de "Available"
      */
     private void reHash() {
-        // Salva o array antigo
         Item[] arrayAntigo = this.array;
         int capacidadeAntiga = this.capacidade;
 
-        // Calcula nova capacidade (primo próximo ao dobro da capacidade atual)
+        // Dobra capacidade e ajusta para próximo primo
         int nova_capacidade = this.capacidade * 2;
         if (this.isPrimo(nova_capacidade)) {
             this.capacidade = nova_capacidade;
@@ -179,14 +218,12 @@ public class hash implements DictInterface {
             this.capacidade = this.proximoPrimo(nova_capacidade);
         }
 
-        // Cria novo array com a nova capacidade
         this.array = new Item[this.capacidade];
         this.tamanho = 0;
 
-        // Reinsere todos os elementos válidos do array antigo no novo array
+        // Re-insere todos elementos válidos
         for (int i = 0; i < capacidadeAntiga; i++) {
             if (arrayAntigo[i] != null && !arrayAntigo[i].value().equals("Available")) {
-                // Usa sondagem linear para evitar problemas durante o rehashing
                 int index = this.dispersao((Integer) arrayAntigo[i].key());
 
                 while (this.array[index] != null) {
@@ -200,181 +237,114 @@ public class hash implements DictInterface {
     }
 
     /**
-     * Função de dispersão que converte uma chave em um índice da tabela
-     * Combina código hash com mapa de compressão
+     * Função de dispersão principal
      *
-     * @param k Chave a ser dispersada
-     * @return Índice na tabela hash
+     * @param k chave
+     * @return posição inicial no array (0 a capacidade-1)
      */
     private int dispersao(int k) {
-        int hash = this.codigoHash(k);
-        int compressao = this.mapaCompressao(hash);
-        return compressao;
+        return this.codigoHash(k) % this.capacidade;
     }
 
     /**
-     * Calcula o tamanho do "pulo" para resolução de colisões
+     * Calcula tamanho do passo para sondagem
      *
-     * @param k             Chave
-     * @param is_doubleHash Se deve usar double hashing ou sondagem linear
-     * @return Tamanho do pulo
+     * @param k             chave
+     * @param is_doubleHash usar double hashing?
+     * @return tamanho do pulo (1 para linear, calculado para double)
      */
     private int pulo(int k, boolean is_doubleHash) {
-        int compressao;
         if (is_doubleHash) {
-            // Double hashing: usa uma segunda função hash
-            int hash = this.segundoCodigoHash(k);
-            compressao = this.segundoMapaCompressao(hash);
-            // Garante que o pulo nunca seja 0
-            if (compressao == 0) {
-                compressao = 1;
-            }
+            int compressao = this.codigoHash(k) % this.proximoPrimo(this.capacidade / 2);
+            return compressao == 0 ? 1 : compressao; // Evita pulo 0
         } else {
-            // Sondagem linear: sempre pula 1 posição
-            compressao = 1;
+            return 1; // Linear probing
         }
-        return compressao;
     }
 
     /**
-     * Primeira função de código hash
+     * Função hash primária - converte chave em código
      *
-     * @param k Chave
-     * @return Código hash
+     * @param k chave
+     * @return código hash (sempre positivo)
      */
     private int codigoHash(int k) {
-        return Math.abs(k); // Garante valor positivo
-    }
-
-    /**
-     * Segunda função de código hash (para double hashing)
-     *
-     * @param k Chave
-     * @return Segundo código hash
-     */
-    private int segundoCodigoHash(int k) {
         return Math.abs(k);
     }
 
     /**
-     * Primeiro mapa de compressão - converte hash code em índice válido
+     * Verifica se um número é primo
      *
-     * @param hash Código hash
-     * @return Índice na tabela
+     * @param num número a verificar
+     * @return true se primo, false caso contrário
      */
-    private int mapaCompressao(int hash) {
-        return hash % this.capacidade;
-    }
+    private boolean isPrimo(int num) {
+        if (num <= 1)
+            return false;
+        if (num == 2)
+            return true;
+        if (num % 2 == 0)
+            return false;
 
-    /**
-     * Segundo mapa de compressão (para double hashing)
-     * Usa um primo menor que a capacidade para garantir boa distribuição
-     *
-     * @param hash Código hash
-     * @return Valor para o pulo no double hashing
-     */
-    private int segundoMapaCompressao(int hash) {
-        int primeMenor = this.proximoPrimo(this.capacidade / 2);
-        return hash % primeMenor;
-    }
-
-    /**
-     * Remove um elemento da hash table
-     * Marca a posição como "Available" para manter a integridade da sondagem
-     *
-     * @param k Chave do elemento a ser removido
-     * @return Item removido
-     */
-    public Item removeElement(int k) {
-        int index = this.findElementIndex(k);
-
-        if (this.array[index] == null || this.array[index].value().equals("Available")) {
-            throw new RuntimeException("Sem elemento para ser removido");
-        }
-
-        Item elemento = this.array[index];
-        // Marca como disponível em vez de null para não quebrar a sequência de sondagem
-        this.array[index] = new Item(k, "Available");
-
-        this.tamanho--;
-        return elemento;
-    }
-
-    /**
-     * Retorna o número de elementos na hash table
-     *
-     * @return Tamanho atual
-     */
-    public int size() {
-        return this.tamanho;
-    }
-
-    /**
-     * Verifica se a hash table está vazia
-     *
-     * @return true se vazia, false caso contrário
-     */
-    public boolean isEmpty() {
-        return this.tamanho == 0;
-    }
-
-    /**
-     * Retorna um iterador para todas as chaves válidas na hash table
-     *
-     * @return Iterator das chaves
-     */
-    public Iterator<Integer> keys() {
-        ArrayList<Integer> chaves = new ArrayList<>();
-        if (this.tamanho != 0) {
-            for (int i = 0; i < this.capacidade; i++) {
-                if (this.array[i] != null && !this.array[i].value().equals("Available")) {
-                    chaves.add((Integer) this.array[i].key());
-                }
+        for (int i = 3; i <= Math.sqrt(num); i += 2) {
+            if (num % i == 0) {
+                return false;
             }
         }
-        return chaves.iterator();
+        return true;
     }
 
     /**
-     * Retorna um iterador para todos os elementos válidos na hash table
+     * Encontra o próximo número primo maior que o dado
      *
-     * @return Iterator dos elementos
+     * @param num número base
+     * @return próximo primo
      */
-    public Iterator<Item> elements() {
-        ArrayList<Item> elementos = new ArrayList<>();
-        if (this.tamanho != 0) {
-            for (int i = 0; i < this.capacidade; i++) {
-                if (this.array[i] != null && !this.array[i].value().equals("Available")) {
-                    elementos.add(this.array[i]);
-                }
-            }
+    private int proximoPrimo(int num) {
+        int candidato = num + 1;
+        while (!isPrimo(candidato)) {
+            candidato++;
         }
-        return elementos.iterator();
+        return candidato;
     }
 
-    /**
-     * Método auxiliar para visualizar o estado atual da hash table
-     * Útil para debugging e compreensão do funcionamento
-     */
-    public void printTable() {
-        System.out.println("=== Estado da Hash Table ===");
-        System.out.println("Capacidade: " + this.capacidade);
-        System.out.println("Tamanho: " + this.tamanho);
-        System.out.println("Fator de carga: " + (double) this.tamanho / this.capacidade);
-        System.out.println("Tipo de resolução: " + (this.is_doubleHash ? "Double Hashing" : "Sondagem Linear"));
+    // ========== MÉTODO PRINT ==========
 
-        for (int i = 0; i < this.capacidade; i++) {
-            if (this.array[i] != null) {
-                if (this.array[i].value().equals("Available")) {
-                    System.out.println("Posição " + i + ": [DISPONÍVEL]");
-                } else {
-                    System.out.println(
-                            "Posição " + i + ": [" + this.array[i].key() + " -> " + this.array[i].value() + "]");
-                }
+    /**
+     * Imprime o estado atual da hash table
+     * Mostra todos os slots, elementos válidos e estatísticas
+     */
+    public void printHashTable() {
+        System.out.println("\n=== HASH TABLE ===");
+        System.out.println("Capacidade: " + capacidade);
+        System.out.println("Elementos: " + tamanho);
+        System.out.println("Fator de carga: " + String.format("%.2f", (double) tamanho / capacidade));
+        System.out.println("Método: " + (is_doubleHash ? "Double Hashing" : "Linear Probing"));
+        System.out.println("\nEstado do array:");
+
+        for (int i = 0; i < capacidade; i++) {
+            String status;
+            String conteudo = "";
+
+            if (array[i] == null) {
+                status = "VAZIO";
+            } else if (array[i].value().equals("Available")) {
+                status = "REMOVIDO";
+                conteudo = " (era chave " + array[i].key() + ")";
             } else {
-                System.out.println("Posição " + i + ": [VAZIO]");
+                status = "OCUPADO";
+                conteudo = " | Chave: " + array[i].key() + " | Valor: " + array[i].value();
             }
+
+            System.out.printf("[%2d] %-8s %s\n", i, status, conteudo);
         }
-        System.out.println("============================");
+
+        System.out.println("\nElementos válidos:");
+        Iterator<Item> elementos = elements();
+        while (elementos.hasNext()) {
+            Item item = elementos.next();
+            System.out.println("- " + item.key() + " → " + item.value());
+        }
+        System.out.println("==================\n");
     }
 }
